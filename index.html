@@ -37,6 +37,7 @@
           <a href="#about">Про проект</a>
           <a href="#how">Як це працює</a>
           <a href="#features">Можливості</a>
+          <a href="#feedback">Відгуки</a>
           <a href="#faq">FAQ</a>
           <button
             class="btn btn-primary nav-cta"
@@ -656,6 +657,160 @@
         </div>
       </section>
 
+      <section class="section alt-bg" id="feedback">
+        <div class="container reveal">
+          <div class="section-heading centered">
+            <span class="eyebrow">Зворотний зв’язок</span>
+            <h2>Допоможіть нам стати кращими</h2>
+            <p class="feedback-intro">
+              Оцініть концепцію, проголосуйте в опитуванні або поділіться
+              думкою.
+            </p>
+          </div>
+
+          <p class="feedback-notice" role="note">
+            Це демонстраційний сайт: відгуки та голоси зберігаються лише у
+            сховищі цього браузера. Вони не надсилаються команді й не
+            синхронізуються між пристроями. Не вказуйте паролі, платіжні
+            реквізити чи інші секретні дані. Для спільного збору даних потрібен
+            backend.
+          </p>
+          <p
+            class="feedback-status"
+            data-feedback-status
+            role="status"
+            aria-live="polite"
+          ></p>
+
+          <div class="feedback-grid">
+            <article class="feedback-card" data-rating-widget>
+              <span class="eyebrow">Оцінка сторінки</span>
+              <h3>Як вам концепція CLICK?</h3>
+              <p class="feedback-muted" data-rating-summary>
+                Ще немає оцінок
+              </p>
+              <div class="star-rating" data-rating-stars aria-label="Ваша оцінка">
+                <button type="button" data-rating-value="1" aria-label="1 з 5 зірок">☆</button>
+                <button type="button" data-rating-value="2" aria-label="2 з 5 зірок">☆</button>
+                <button type="button" data-rating-value="3" aria-label="3 з 5 зірок">☆</button>
+                <button type="button" data-rating-value="4" aria-label="4 з 5 зірок">☆</button>
+                <button type="button" data-rating-value="5" aria-label="5 з 5 зірок">☆</button>
+              </div>
+              <p class="feedback-hint">Вашу оцінку можна змінити.</p>
+              <div class="reaction-row" data-reactions aria-label="Реакції на сторінку">
+                <button type="button" data-reaction="👍" aria-pressed="false">👍 <span>0</span></button>
+                <button type="button" data-reaction="❤️" aria-pressed="false">❤️ <span>0</span></button>
+                <button type="button" data-reaction="👎" aria-pressed="false">👎 <span>0</span></button>
+              </div>
+            </article>
+
+            <article class="feedback-card" data-poll>
+              <div class="feedback-card-heading">
+                <div>
+                  <span class="eyebrow">Опитування</span>
+                  <h3 data-poll-question></h3>
+                </div>
+                <span class="poll-status" data-poll-status></span>
+              </div>
+              <form data-poll-form>
+                <fieldset class="poll-options">
+                  <legend class="visually-hidden">Варіанти відповіді</legend>
+                  <div data-poll-options></div>
+                </fieldset>
+                <button class="btn btn-primary" type="submit" data-poll-submit>
+                  Голосувати
+                </button>
+              </form>
+              <div class="poll-results" data-poll-results hidden></div>
+              <p class="feedback-hint" data-poll-count></p>
+            </article>
+
+            <article class="feedback-card comments-card">
+              <span class="eyebrow">Коментарі</span>
+              <h3>Поділіться думкою</h3>
+              <form class="feedback-form" data-comment-form>
+                <label>
+                  Ім’я <span class="optional-label">(необов’язково)</span>
+                  <input
+                    name="author"
+                    type="text"
+                    maxlength="50"
+                    autocomplete="name"
+                    placeholder="Як до вас звертатися"
+                  />
+                </label>
+                <label>
+                  Коментар
+                  <textarea
+                    name="message"
+                    rows="4"
+                    minlength="2"
+                    maxlength="1000"
+                    required
+                    placeholder="Що варто покращити?"
+                  ></textarea>
+                </label>
+                <button class="btn btn-primary" type="submit">
+                  Додати коментар
+                </button>
+              </form>
+              <div class="comment-list" data-comment-list aria-live="polite"></div>
+            </article>
+
+            <article class="feedback-card">
+              <span class="eyebrow">Зворотний зв’язок</span>
+              <h3>Надішліть відгук</h3>
+              <form class="feedback-form" data-feedback-form>
+                <label>
+                  Тип звернення
+                  <select name="type" required>
+                    <option value="suggestion">Пропозиція</option>
+                    <option value="problem">Проблема</option>
+                    <option value="complaint">Скарга</option>
+                    <option value="general">Загальний відгук</option>
+                  </select>
+                </label>
+                <label>
+                  Тема
+                  <input
+                    name="subject"
+                    type="text"
+                    minlength="3"
+                    maxlength="100"
+                    required
+                    placeholder="Коротко про звернення"
+                  />
+                </label>
+                <label>
+                  Повідомлення
+                  <textarea
+                    name="message"
+                    rows="4"
+                    minlength="10"
+                    maxlength="2000"
+                    required
+                    placeholder="Опишіть вашу пропозицію або проблему"
+                  ></textarea>
+                </label>
+                <fieldset class="experience-rating">
+                  <legend>Оцініть свій досвід (необов’язково)</legend>
+                  <div class="star-rating" data-experience-stars>
+                    <button type="button" data-rating-value="1" aria-label="1 з 5 зірок" aria-pressed="false">☆</button>
+                    <button type="button" data-rating-value="2" aria-label="2 з 5 зірок" aria-pressed="false">☆</button>
+                    <button type="button" data-rating-value="3" aria-label="3 з 5 зірок" aria-pressed="false">☆</button>
+                    <button type="button" data-rating-value="4" aria-label="4 з 5 зірок" aria-pressed="false">☆</button>
+                    <button type="button" data-rating-value="5" aria-label="5 з 5 зірок" aria-pressed="false">☆</button>
+                  </div>
+                </fieldset>
+                <button class="btn btn-primary" type="submit">
+                  Надіслати відгук
+                </button>
+              </form>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section class="section cta-section">
         <div class="container reveal">
           <div class="cta-box">
@@ -692,6 +847,7 @@
         <nav class="footer-nav" aria-label="Навігація у футері">
           <a href="#about">Про проект</a>
           <a href="#how">Як це працює</a>
+          <a href="#feedback">Відгуки</a>
           <a href="#faq">FAQ</a>
           <a href="#business">Для бізнесу</a>
         </nav>
