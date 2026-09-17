@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="CLICK — це fintech-концепція для доступних мікроінвестицій. Простий landing page MVP для стартапу, який допомагає почати інвестувати з невеликих сум."
+    />
+    <title>CLICK | Інвестиції без бар’єрів</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="#home" class="brand" aria-label="Головна сторінка CLICK">
+          <span class="brand-mark">CLICK</span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          aria-expanded="false"
+          aria-label="Відкрити меню"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <nav class="main-nav" aria-label="Головне меню">
+          <a href="#about">Про проект</a>
+          <a href="#how">Як це працює</a>
+          <a href="#features">Можливості</a>
+          <a href="#faq">FAQ</a>
+          <button
+            class="btn btn-primary nav-cta"
+            onclick="
+              document
+                .getElementById('app-window')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            Почати
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="container hero-grid">
+          <div class="hero-copy reveal">
+            <span class="eyebrow">CLICK / U-INVEST</span>
+            <h1>Інвестиції без бар’єрів.</h1>
+            <p class="lead">
+              Починайте інвестувати з невеликих сум. Просто, зрозуміло і в
+              одному місці.
+            </p>
+            <div class="hero-actions">
+              <button
+                class="btn btn-primary"
+                onclick="
+                  document
+                    .getElementById('app-window')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Почати інвестувати
+              </button>
+              <a class="btn btn-secondary" href="#how">Як це працює</a>
+            </div>
+            <ul class="mini-stats" aria-label="Основні характеристики продукту">
+              <li><strong>Small steps</strong><span>Мікроінвестиції</span></li>
+              <li><strong>Clear flow</strong><span>Без зайвих кроків</span></li>
+              <li>
+                <strong>Simple access</strong><span>BankID / Дія.Підпис</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="hero-visual reveal" aria-label="Макет застосунку CLICK">
+            <div class="phone-shell">
+              <div class="phone-header">
+                <span class="dot dot-one"></span>
+                <span class="dot dot-two"></span>
+                <span class="dot dot-three"></span>
+                <strong>CLICK</strong>
+              </div>
+
+              <div class="wallet-card">
+                <span>Баланс</span>
+                <strong>₴ 100.90</strong>
+              </div>
+
+              <div class="asset-list">
+                <div class="asset-item highlight">
+                  <div>
+                    <span class="asset-name">Apple Inc.</span>
+                    <small>AAPL</small>
+                  </div>
+                  <div class="asset-right">
+                    <span class="change">+1</span>
+                    <button
+                      class="tiny-btn"
+                      data-open-modal="Покупка в демо-режимі"
+                    >
+                      Buy
+                    </button>
+                  </div>
+                </div>
+
+                <div class="asset-item">
+                  <div>
+                    <span class="asset-name">ОВДП</span>
+                    <small>Ukrainian fund</small>
+                  </div>
+                  <div class="asset-right">
+                    <span class="price">₴ 18.50</span>
+                  </div>
+                </div>
+
+                <div class="asset-item">
+                  <div>
+                    <span class="asset-name">Local business</span>
+                    <small>Startup</small>
+                  </div>
+                  <div class="asset-right">
+                    <span class="price">₴ 12.30</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="about">
+        <div class="container narrow reveal">
+          <div class="section-heading">
+            <span class="eyebrow">Проблема</span>
+            <h2>Інвестувати має бути простіше</h2>
+          </div>
+
+          <div class="cards three-up">
+            <article class="info-card">
+              <div class="icon-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M12 2 4 6v6c0 4.42 2.89 8.54 8 10 5.11-1.46 8-5.58 8-10V6l-8-4Zm0 3.5 5 2.5v4.36c0 3.16-2.09 6.11-5 7.2-2.91-1.09-5-4.04-5-7.2V8l5-2.5Zm-1 3h2v6h-2V8Zm0 8h2v2h-2v-2Z"
+                  />
+                </svg>
+              </div>
+              <h3>Високий поріг входу</h3>
+              <p>
+                Мінімальний поріг покупки традиційних інвестиційних інструментів
+                може бути недоступним для людини, яка тільки починає.
+              </p>
+            </article>
+
+            <article class="info-card">
+              <div class="icon-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2Zm1 15h-2v-2h2Zm0-4h-2V7h2Z"
+                  />
+                </svg>
+              </div>
+              <h3>Складно розібратися</h3>
+              <p>
+                Брокерські рахунки, документи, інтерфейси та інші процеси можуть
+                бути занадто складними для початківця-інвестора.
+              </p>
+            </article>
+
+            <article class="info-card">
+              <div class="icon-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M4 12h2v7H4zm6-6h2v13h-2zm6 3h2v10h-2zm3-7v18h-2V2h2ZM7 3h2v16H7z"
+                  />
+                </svg>
+              </div>
+              <h3>Заощадження втрачають цінність</h3>
+              <p>
+                Невеликі суми, які регулярно залишаються вільними, можуть просто
+                лежати без використання.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt-bg" id="solution">
+        <div class="container reveal">
+          <div class="section-heading centered">
+            <span class="eyebrow">Рішення</span>
+            <h2>Інвестувати — за кілька кліків</h2>
+          </div>
+
+          <div class="cards four-up">
+            <article class="feature-card">
+              <h3>Малі суми</h3>
+              <p>
+                Можливість купувати невеликі частки активів і рухатися
+                поступово.
+              </p>
+            </article>
+            <article class="feature-card">
+              <h3>Просте початок</h3>
+              <p>
+                Зрозумілий інтерфейс і мінімум зайвих кроків перед першою
+                покупкою.
+              </p>
+            </article>
+            <article class="feature-card">
+              <h3>Диверсифікація</h3>
+              <p>
+                Формувати портфель із різних активів без перевантаження складною
+                логікою.
+              </p>
+            </article>
+            <article class="feature-card">
+              <h3>AI-помічник</h3>
+              <p>
+                Внутрішній помічник може підтримувати пошук актуальних активів
+                за запитом користувача.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="how">
+        <div class="container two-col how-layout reveal">
+          <div>
+            <div class="section-heading">
+              <span class="eyebrow">Як це працює</span>
+              <h2>Простий шлях від ідеї до першої інвестиції</h2>
+            </div>
+
+            <div class="steps">
+              <div class="step-item">
+                <span class="step-number">01</span>
+                <div>
+                  <h3>Створіть обліковий запис</h3>
+                  <p>
+                    Швидка реєстрація та проста ідентифікація через BankID або
+                    Дія.Підпис.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <span class="step-number">02</span>
+                <div>
+                  <h3>Поповніть баланс</h3>
+                  <p>
+                    Внесіть невелику суму та використовуйте зрозумілий інтерфейс
+                    поповнення.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <span class="step-number">03</span>
+                <div>
+                  <h3>Виберіть актив</h3>
+                  <p>
+                    Переглядайте доступні активи, фонди та бізнес-пропозиції в
+                    одному місці.
+                  </p>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <span class="step-number">04</span>
+                <div>
+                  <h3>Інвестуйте в один клік</h3>
+                  <p>
+                    Демо-процес починається за кілька кроків без складної
+                    навігації.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-screen-wrap">
+            <div class="mini-screen">
+              <div class="mini-header">
+                <span>CLICK</span>
+                <span class="mini-badge">Live</span>
+              </div>
+              <div class="mini-balance">
+                <small>Ваш баланс</small>
+                <strong>₴ 100.90</strong>
+              </div>
+              <div class="mini-panel">
+                <div class="mini-row">
+                  <span>Apple Inc.</span>
+                  <strong>AAPL</strong>
+                </div>
+                <div class="mini-row action-row">
+                  <span>₴ 100.90</span>
+                  <button data-open-modal="Це демонстрація MVP">Buy</button>
+                </div>
+              </div>
+              <div class="mini-panel muted">
+                <div class="mini-row">
+                  <span>ОВДП</span>
+                  <strong>0.02</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt-bg" id="features">
+        <div class="container reveal">
+          <div class="section-heading centered">
+            <span class="eyebrow">MVP</span>
+            <h2>Усе необхідне — в одному місці</h2>
+          </div>
+
+          <div class="cards feature-grid">
+            <article class="feature-card compact">
+              <h3>Поповнення балансу</h3>
+              <p>Зручний спосіб поповнити рахунок через підтримувані методи.</p>
+            </article>
+            <article class="feature-card compact">
+              <h3>Покупка в один клік</h3>
+              <p>Швидка покупка обраного інструмента без потокових форм.</p>
+            </article>
+            <article class="feature-card compact">
+              <h3>Особистий кабінет</h3>
+              <p>
+                Стан балансу, активи та історія активності в одному інтерфейсі.
+              </p>
+            </article>
+            <article class="feature-card compact">
+              <h3>Перегляд активів</h3>
+              <p>
+                Доступ до добірки активів, фондів та пропозицій на платформі.
+              </p>
+            </article>
+            <article class="feature-card compact">
+              <h3>Управління портфелем</h3>
+              <p>Поступове накопичення та видимість складу інвестицій.</p>
+            </article>
+            <article class="feature-card compact">
+              <h3>Виведення коштів</h3>
+              <p>
+                Простий механізм переказу коштів назад на баланс користувача.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      
+      <section class="section app-showcase" id="app">
+        <div class="container reveal">
+          <div class="section-heading centered">
+            <span class="eyebrow">Mockup</span>
+            <h2>Сучасний fintech UI для першого MVP</h2>
+          </div>
+
+          <div class="app-window" id="app-window">
+            <div class="app-window-topbar">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+
+            <div class="app-content">
+              <header class="app-header">
+                <strong>CLICK</strong>
+                <span class="app-pill">Portfolio</span>
+              </header>
+
+              <div class="app-balance-box">
+                <span>Ваш баланс</span>
+                <strong>₴ 100.90</strong>
+              </div>
+
+              <div class="app-section-title">
+                <span>Мої активи</span>
+                <button data-open-modal="Це демонстрація MVP">
+                  + Додати актив
+                </button>
+              </div>
+
+              <div class="app-asset-row">
+                <div>
+                  <h4>Apple Inc.</h4>
+                  <small>AAPL</small>
+                </div>
+                <div class="app-asset-actions">
+                  <span>₴ 100.90 / акція</span>
+                  <button data-open-modal="Покупка в демо-режимі">Buy</button>
+                </div>
+              </div>
+
+              <div class="fraction-picker" data-share-price="100.90">
+                <div class="fraction-picker-heading">
+                  <label for="share-fraction">Частка акції</label>
+                  <output for="share-fraction" data-fraction-output
+                    >0.01 акції</output
+                  >
+                </div>
+                <div class="fraction-picker-controls">
+                  <select
+                    id="share-fraction"
+                    data-fraction-select
+                    aria-label="Виберіть частку акції"
+                  >
+                    <option value="0.01">0.01</option>
+                    <option value="0.05">0.05</option>
+                    <option value="0.1">0.10</option>
+                    <option value="0.25">0.25</option>
+                    <option value="0.5">0.50</option>
+                    <option value="1">1.00</option>
+                  </select>
+                  <strong data-fraction-total>₴ 1.01</strong>
+                </div>
+                <input
+                  type="range"
+                  min="0.01"
+                  max="1"
+                  step="0.01"
+                  value="0.01"
+                  data-fraction-range
+                  aria-label="Оберіть розмір частки акції"
+                />
+              </div>
+
+              <div class="app-asset-row muted-row">
+                <div>
+                  <h4>ОВДП</h4>
+                  <small>0.02</small>
+                </div>
+                <div class="app-asset-actions">
+                  <span>₴ 24.00</span>
+                </div>
+              </div>
+
+              <div class="app-asset-row muted-row">
+                <div>
+                  <h4>Startup</h4>
+                  <small>Local business</small>
+                </div>
+                <div class="app-asset-actions">
+                  <span>₴ 16.70</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="audience">
+        <div class="container reveal">
+          <div class="section-heading">
+            <span class="eyebrow">Цільова аудиторія</span>
+            <h2>Для тих, хто хоче почати інвестувати</h2>
+          </div>
+
+          <div class="cards three-up">
+            <article class="info-card">
+              <h3>Молодь</h3>
+              <p>
+                Люди 18–28 років, які хочуть почати інвестувати з невеликих сум.
+              </p>
+            </article>
+            <article class="info-card">
+              <h3>Криптоінвестори</h3>
+              <p>
+                Люди, звичні до зручності цифрових бірж і які хочуть
+                диверсифікуватися в реальні активи.
+              </p>
+            </article>
+            <article class="info-card">
+              <h3>Роздрібні інвестори</h3>
+              <p>
+                Люди, які шукають просту альтернативу традиційним способам
+                зберігання вільних коштів.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section compact-section" id="business">
+        <div class="container business-box reveal">
+          <div>
+            <span class="eyebrow">Для бізнесу</span>
+            <h2>Капітал має бути доступнішим не лише інвесторам</h2>
+          </div>
+          <p>
+            CLICK в перспективі може дати українському бізнесу можливість
+            залучати роздрібний капітал через просту цифрову платформу.
+          </p>
+          <button
+            class="btn btn-primary"
+            data-open-modal="Для бізнесу — демонстраційний сценарій"
+          >
+            Для бізнесу
+          </button>
+        </div>
+      </section>
+
+      <section class="section" id="monetization">
+        <div class="container reveal">
+          <div class="section-heading centered">
+            <span class="eyebrow">Монетизація</span>
+            <h2>Як працює бізнес-модель</h2>
+          </div>
+
+          <div class="cards four-up">
+            <article class="feature-card compact">
+              <h3>Transaction Fee</h3>
+              <p>Невелика комісія за операції.</p>
+            </article>
+            <article class="feature-card compact">
+              <h3>Spread</h3>
+              <p>
+                Маржа між ринковою ціною цілого активу та ціною його часток.
+              </p>
+            </article>
+            <article class="feature-card compact">
+              <h3>Listing Fee</h3>
+              <p>Комісія з бізнесу за розміщення активів на платформі.</p>
+            </article>
+            <article class="feature-card compact">
+              <h3>SaaS</h3>
+              <p>Підписка на додаткові функції, AI та актуальні новини.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt-bg" id="roadmap">
+        <div class="container reveal">
+          <div class="section-heading centered">
+            <span class="eyebrow">Roadmap</span>
+            <h2>План розвитку продукту</h2>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <span class="timeline-step">01</span>
+              <div class="timeline-content">
+                <h3>Telegram Bot</h3>
+                <p>Спрощений інтерфейс для перших операцій.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-step">02</span>
+              <div class="timeline-content">
+                <h3>Mobile Web App</h3>
+                <p>Повноцінний мобільний web-застосунок.</p>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-step">03</span>
+              <div class="timeline-content">
+                <h3>Native App</h3>
+                <p>Застосунок для App Store та Google Play.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section faq-section" id="faq">
+        <div class="container reveal">
+          <div class="section-heading centered">
+            <span class="eyebrow">FAQ</span>
+            <h2>Відповіді на головні питання</h2>
+          </div>
+
+          <div class="faq-list">
+            <article class="faq-item active">
+              <button class="faq-question" aria-expanded="true">
+                <span>З якої суми можна почати?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Концепція передбачає мікроінвестування та покупку невеликих
+                  часток активів. Варто пам’ятати, що продукт поки що
+                  знаходиться на етапі MVP та демонстрації концепції.
+                </p>
+              </div>
+            </article>
+
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span>Які активи будуть доступні?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  У майбутньому платформа може пропонувати різні види активів,
+                  включаючи ОВДП, акції та активи бізнесу.
+                </p>
+              </div>
+            </article>
+
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span>Чи треба йти до банку?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  У концепції передбачена ідентифікація через BankID /
+                  Дія.Підпис без необхідності відвідувати банк.
+                </p>
+              </div>
+            </article>
+
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span>Це готова інвестиційна платформа?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Ні. Цей сайт демонструє концепцію MVP продукту та його
+                  користувацький інтерфейс для презентації ідеї.
+                </p>
+              </div>
+            </article>
+
+            <article class="faq-item">
+              <button class="faq-question" aria-expanded="false">
+                <span>Чи є гарантія дохідності?</span>
+                <span class="faq-icon">+</span>
+              </button>
+              <div class="faq-answer">
+                <p>
+                  Ні. Інвестиції пов’язані з ризиком, і продукт не обіцяє
+                  гарантовану прибутковість або дохідність.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cta-section">
+        <div class="container reveal">
+          <div class="cta-box">
+            <span class="eyebrow">CLICK</span>
+            <h2>Почніть з малого.</h2>
+            <p>
+              CLICK створюється для того, щоб інвестиції були зрозумілішими та
+              доступнішими.
+            </p>
+            <button
+              class="btn btn-primary"
+              onclick="
+                document
+                  .getElementById('app-window')
+                  .scrollIntoView({ behavior: 'smooth' })
+              "
+            >
+              Спробувати CLICK
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <a href="#home" class="brand footer-brand">
+            <span class="brand-mark">CLICK</span>
+          </a>
+          <p>Інвестиції без бар’єрів.</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Навігація у футері">
+          <a href="#about">Про проект</a>
+          <a href="#how">Як це працює</a>
+          <a href="#faq">FAQ</a>
+          <a href="#business">Для бізнесу</a>
+        </nav>
+      </div>
+
+      <div class="container footer-bottom">
+        <p>
+          CLICK — концепція інвестиційної платформи. Інвестиції пов’язані з
+          ризиком.
+        </p>
+      </div>
+    </footer>
+
+    <div class="modal" id="demo-modal" aria-hidden="true">
+      <div class="modal-backdrop" data-close-modal="true"></div>
+      <div
+        class="modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
+        <button
+          class="modal-close"
+          aria-label="Закрити діалог"
+          data-close-modal="true"
+        >
+          ×
+        </button>
+        <span class="eyebrow">CLICK</span>
+        <h3 id="modal-title">Демо-режим</h3>
+        <p>
+          Це демонстрація MVP продукту. Ми не виконуємо реальні фінансові
+          операції.
+        </p>
+        <button class="btn btn-primary" data-close-modal="true">
+          Зрозуміло
+        </button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
