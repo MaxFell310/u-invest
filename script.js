@@ -15,6 +15,7 @@ if (fractionPicker) {
   const fractionTotal = fractionPicker.querySelector("[data-fraction-total]");
   const sharePrice = Number(fractionPicker.dataset.sharePrice);
 
+  
   const updateFraction = value => {
     const fraction = Number(value);
     fractionSelect.value = fraction
