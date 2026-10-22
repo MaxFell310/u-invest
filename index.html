@@ -37,6 +37,7 @@
           <a href="#about">Про проект</a>
           <a href="#how">Як це працює</a>
           <a href="#features">Можливості</a>
+          <a href="#responsible">Відповідальність</a>
           <a href="#feedback">Відгуки</a>
           <a href="#faq">FAQ</a>
           <button
@@ -401,70 +402,163 @@
                 </button>
               </div>
 
-              <div class="app-asset-row">
-                <div>
-                  <h4>Apple Inc.</h4>
-                  <small>AAPL</small>
+              <div class="asset-list-controls">
+                <label class="responsible-toggle">
+                  <input
+                    type="checkbox"
+                    data-responsible-filter
+                    aria-label="Показати лише відповідальні активи"
+                  />
+                  <span class="toggle-track" aria-hidden="true"></span>
+                  <span>Показати лише відповідальні активи</span>
+                </label>
+              </div>
+
+              <div class="app-asset-card" data-esg="false">
+                <div class="app-asset-row">
+                  <div class="app-asset-info">
+                    <h4>Apple Inc.</h4>
+                    <small>AAPL</small>
+                    <button
+                      class="esg-badge esg-neutral"
+                      type="button"
+                      aria-label="Без ESG-позначки. Для цього активу немає підтвердженої ESG-позначки."
+                      aria-describedby="esg-apple-tooltip"
+                      aria-expanded="false"
+                    >
+                      ⚪ Без ESG-позначки
+                      <span class="esg-tooltip" id="esg-apple-tooltip" role="tooltip">
+                        Для цього активу немає підтвердженої ESG-позначки.
+                      </span>
+                    </button>
+                  </div>
+                  <div class="app-asset-actions">
+                    <span>₴ 100.90 / акція</span>
+                    <button
+                      data-open-modal="Покупка в демо-режимі"
+                      data-purchase-trigger
+                    >
+                      Buy
+                    </button>
+                  </div>
                 </div>
-                <div class="app-asset-actions">
-                  <span>₴ 100.90 / акція</span>
-                  <button data-open-modal="Покупка в демо-режимі">Buy</button>
+
+                <div
+                  class="fraction-picker"
+                  data-share-price="100.90"
+                  data-purchase-limit="100"
+                >
+                  <div class="fraction-picker-heading">
+                    <label for="share-fraction">Частка акції</label>
+                    <output for="share-fraction" data-fraction-output
+                      >0.01 акції</output
+                    >
+                  </div>
+                  <div class="fraction-picker-controls">
+                    <select
+                      id="share-fraction"
+                      data-fraction-select
+                      aria-label="Виберіть частку акції"
+                    >
+                      <option value="0.01">0.01</option>
+                      <option value="0.05">0.05</option>
+                      <option value="0.1">0.10</option>
+                      <option value="0.25">0.25</option>
+                      <option value="0.5">0.50</option>
+                      <option value="1">1.00</option>
+                    </select>
+                    <strong data-fraction-total>₴ 1.01</strong>
+                  </div>
+                  <input
+                    type="range"
+                    min="0.01"
+                    max="1"
+                    step="0.01"
+                    value="0.01"
+                    data-fraction-range
+                    aria-label="Оберіть розмір частки акції"
+                  />
                 </div>
               </div>
 
-              <div class="fraction-picker" data-share-price="100.90">
-                <div class="fraction-picker-heading">
-                  <label for="share-fraction">Частка акції</label>
-                  <output for="share-fraction" data-fraction-output
-                    >0.01 акції</output
-                  >
-                </div>
-                <div class="fraction-picker-controls">
-                  <select
-                    id="share-fraction"
-                    data-fraction-select
-                    aria-label="Виберіть частку акції"
-                  >
-                    <option value="0.01">0.01</option>
-                    <option value="0.05">0.05</option>
-                    <option value="0.1">0.10</option>
-                    <option value="0.25">0.25</option>
-                    <option value="0.5">0.50</option>
-                    <option value="1">1.00</option>
-                  </select>
-                  <strong data-fraction-total>₴ 1.01</strong>
-                </div>
-                <input
-                  type="range"
-                  min="0.01"
-                  max="1"
-                  step="0.01"
-                  value="0.01"
-                  data-fraction-range
-                  aria-label="Оберіть розмір частки акції"
-                />
-              </div>
-
-              <div class="app-asset-row muted-row">
-                <div>
-                  <h4>ОВДП</h4>
-                  <small>0.02</small>
-                </div>
-                <div class="app-asset-actions">
-                  <span>₴ 24.00</span>
+              <div class="app-asset-card" data-esg="true">
+                <div class="app-asset-row muted-row">
+                  <div class="app-asset-info">
+                    <h4>ОВДП</h4>
+                    <small>0.02</small>
+                    <button
+                      class="esg-badge esg-social"
+                      type="button"
+                      aria-label="Соціальний вплив. У демо ОВДП позначені як актив із соціальним впливом."
+                      aria-describedby="esg-bonds-tooltip"
+                      aria-expanded="false"
+                    >
+                      🤝 Соціальний вплив
+                      <span class="esg-tooltip" id="esg-bonds-tooltip" role="tooltip">
+                        У демо ОВДП позначені як актив із соціальним впливом.
+                      </span>
+                    </button>
+                  </div>
+                  <div class="app-asset-actions">
+                    <span>₴ 24.00</span>
+                  </div>
                 </div>
               </div>
 
-              <div class="app-asset-row muted-row">
-                <div>
-                  <h4>Startup</h4>
-                  <small>Local business</small>
-                </div>
-                <div class="app-asset-actions">
-                  <span>₴ 16.70</span>
+              <div class="app-asset-card" data-esg="true">
+                <div class="app-asset-row muted-row">
+                  <div class="app-asset-info">
+                    <h4>Startup</h4>
+                    <small>Local business</small>
+                    <button
+                      class="esg-badge esg-local"
+                      type="button"
+                      aria-label="Підтримка локального бізнесу. Позначка вказує на підтримку локальних компаній та економіки України."
+                      aria-describedby="esg-local-tooltip"
+                      aria-expanded="false"
+                    >
+                      🇺🇦 Підтримка локального бізнесу
+                      <span class="esg-tooltip" id="esg-local-tooltip" role="tooltip">
+                        Позначка вказує на підтримку локальних компаній та економіки України.
+                      </span>
+                    </button>
+                  </div>
+                  <div class="app-asset-actions">
+                    <span>₴ 16.70</span>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt-bg" id="responsible">
+        <div class="container reveal">
+          <div class="section-heading centered">
+            <span class="eyebrow">Відповідальність</span>
+            <h2>Відповідальне інвестування</h2>
+          </div>
+
+          <div class="cards three-up">
+            <article class="info-card">
+              <h3>Захист новачків</h3>
+              <p>
+                У демо разова покупка має ліміт ₴ 100. Інвестиції пов’язані з
+                ризиком втрати коштів.
+              </p>
+            </article>
+            <article class="info-card">
+              <h3>Прозорість</h3>
+              <p>
+                Можливі комісії: за операцію, різниця між ціною активу та його
+                часткою, а також за розміщення. Доходність не гарантована.
+              </p>
+            </article>
+            <article class="info-card">
+              <h3>Фінансова грамотність</h3>
+              <p>Не інвестуйте більше, ніж готові втратити.</p>
+            </article>
           </div>
         </div>
       </section>
@@ -962,7 +1056,7 @@
         </button>
         <span class="eyebrow">U-Invest</span>
         <h3 id="modal-title">Демо-режим</h3>
-        <p>
+        <p data-modal-message>
           Це демонстрація MVP продукту. Ми не виконуємо реальні фінансові
           операції.
         </p>

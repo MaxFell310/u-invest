@@ -7,6 +7,11 @@ const modal = document.getElementById("demo-modal");
 const modalTriggers = document.querySelectorAll("[data-open-modal]");
 const modalCloseButtons = document.querySelectorAll("[data-close-modal]");
 const fractionPicker = document.querySelector("[data-share-price]");
+const responsibleFilter = document.querySelector("[data-responsible-filter]");
+const assetCards = document.querySelectorAll(".app-asset-card[data-esg]");
+const esgBadges = document.querySelectorAll(".esg-badge");
+const modalMessage = modal?.querySelector("[data-modal-message]");
+let modalReturnFocus = null;
 
 if (fractionPicker) {
   const fractionSelect = fractionPicker.querySelector("[data-fraction-select]");
@@ -34,6 +39,28 @@ if (fractionPicker) {
     updateFraction(event.target.value);
   });
 }
+
+responsibleFilter?.addEventListener("change", () => {
+  assetCards.forEach(card => {
+    const visible =
+      !responsibleFilter.checked || card.dataset.esg === "true";
+    card.classList.toggle("is-filtered-out", !visible);
+    card.setAttribute("aria-hidden", String(!visible));
+    card.inert = !visible;
+  });
+});
+
+esgBadges.forEach(badge => {
+  badge.addEventListener("click", () => {
+    const isExpanded = badge.getAttribute("aria-expanded") === "true";
+    esgBadges.forEach(otherBadge => {
+      otherBadge.setAttribute("aria-expanded", "false");
+      otherBadge.classList.remove("is-tooltip-open");
+    });
+    badge.setAttribute("aria-expanded", String(!isExpanded));
+    badge.classList.toggle("is-tooltip-open", !isExpanded);
+  });
+});
 
 if (menuToggle) {
   menuToggle.addEventListener("click", () => {
@@ -87,20 +114,46 @@ const observer = new IntersectionObserver(
 
 revealItems.forEach(element => observer.observe(element));
 
-function openModal() {
+function openModal(event) {
   if (!modal) return;
+  modalReturnFocus = event.currentTarget;
+  const purchaseTrigger = event.currentTarget.closest(
+    "[data-purchase-trigger]",
+  );
+
+  if (purchaseTrigger && fractionPicker && modalMessage) {
+    const fractionSelect = fractionPicker.querySelector(
+      "[data-fraction-select]",
+    );
+    const sharePrice = Number(fractionPicker.dataset.sharePrice);
+    const purchaseLimit = Number(fractionPicker.dataset.purchaseLimit);
+    const purchaseAmount = sharePrice * Number(fractionSelect?.value);
+
+    // The demo cap is advisory: it changes the message but never blocks buying.
+    modalMessage.textContent =
+      purchaseAmount > purchaseLimit
+        ? `Увага: сума покупки ₴ ${purchaseAmount.toFixed(2)} перевищує демо-ліміт ₴ ${purchaseLimit}. Це м’яке попередження — дія не блокується. Інвестиції пов’язані з ризиком.`
+        : "Це демонстрація MVP продукту. Ми не виконуємо реальні фінансові операції.";
+  } else if (modalMessage) {
+    modalMessage.textContent =
+      "Це демонстрація MVP продукту. Ми не виконуємо реальні фінансові операції.";
+  }
+
   modal.classList.add("is-open");
   modal.setAttribute("aria-hidden", "false");
+  modal.querySelector(".modal-close")?.focus();
 }
 
 function closeModal() {
   if (!modal) return;
   modal.classList.remove("is-open");
   modal.setAttribute("aria-hidden", "true");
+  modalReturnFocus?.focus();
+  modalReturnFocus = null;
 }
 
 modalTriggers.forEach(trigger => {
-  trigger.addEventListener("click", openModal);
+  trigger.addEventListener("click", event => openModal(event));
 });
 
 modalCloseButtons.forEach(button => {
@@ -110,6 +163,29 @@ modalCloseButtons.forEach(button => {
 document.addEventListener("keydown", event => {
   if (event.key === "Escape" && modal?.classList.contains("is-open")) {
     closeModal();
+  }
+
+  if (event.key === "Escape") {
+    esgBadges.forEach(badge => {
+      badge.setAttribute("aria-expanded", "false");
+      badge.classList.remove("is-tooltip-open");
+    });
+  }
+
+  if (event.key === "Tab" && modal?.classList.contains("is-open")) {
+    const focusableElements = modal.querySelectorAll(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    );
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (event.shiftKey && document.activeElement === firstElement) {
+      event.preventDefault();
+      lastElement?.focus();
+    } else if (!event.shiftKey && document.activeElement === lastElement) {
+      event.preventDefault();
+      firstElement?.focus();
+    }
   }
 });
 
