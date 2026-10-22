@@ -15,7 +15,6 @@ if (fractionPicker) {
   const fractionTotal = fractionPicker.querySelector("[data-fraction-total]");
   const sharePrice = Number(fractionPicker.dataset.sharePrice);
 
-  
   const updateFraction = value => {
     const fraction = Number(value);
     fractionSelect.value = fraction
@@ -219,7 +218,10 @@ function updateStarButtons(container, value) {
     const selected = Number(button.dataset.ratingValue) <= value;
     button.classList.toggle("is-selected", selected);
     button.textContent = selected ? "★" : "☆";
-    button.setAttribute("aria-pressed", String(Number(button.dataset.ratingValue) === value));
+    button.setAttribute(
+      "aria-pressed",
+      String(Number(button.dataset.ratingValue) === value),
+    );
   });
 }
 
@@ -249,7 +251,8 @@ function renderRating() {
   const allRatings = validRatings();
   const mine = allRatings.find(rating => rating.ownerId === ownerId);
   const average = allRatings.length
-    ? allRatings.reduce((sum, rating) => sum + rating.value, 0) / allRatings.length
+    ? allRatings.reduce((sum, rating) => sum + rating.value, 0) /
+      allRatings.length
     : 0;
 
   if (ratingSummary) {
@@ -313,14 +316,18 @@ function renderPoll() {
   question.textContent = poll.question;
   status.textContent = poll.ended ? "Завершене" : "Активне";
   status.classList.toggle("is-closed", poll.ended);
-  options.replaceChildren(...poll.options.map(option => createPollOption(option, showResults)));
+  options.replaceChildren(
+    ...poll.options.map(option => createPollOption(option, showResults)),
+  );
   form.hidden = showResults;
   results.hidden = !showResults;
   results.replaceChildren();
 
   if (showResults) {
     poll.options.forEach(option => {
-      const optionVotes = votes.filter(vote => vote.choices.includes(option.id)).length;
+      const optionVotes = votes.filter(vote =>
+        vote.choices.includes(option.id),
+      ).length;
       const percentage = votes.length
         ? Math.round((optionVotes / votes.length) * 100)
         : 0;
@@ -333,7 +340,10 @@ function renderPoll() {
       total.textContent = `${optionVotes} · ${percentage}%`;
       const track = document.createElement("div");
       track.className = "poll-result-track";
-      track.setAttribute("aria-label", `${optionVotes} голосів, ${percentage}%`);
+      track.setAttribute(
+        "aria-label",
+        `${optionVotes} голосів, ${percentage}%`,
+      );
       const bar = document.createElement("div");
       bar.className = "poll-result-bar";
       bar.style.width = `${percentage}%`;
@@ -382,7 +392,11 @@ function renderComments() {
 
   if (!orderedComments.length) {
     commentList.append(
-      createElement("p", "comment-empty", "Коментарів поки немає. Будьте першими!"),
+      createElement(
+        "p",
+        "comment-empty",
+        "Коментарів поки немає. Будьте першими!",
+      ),
     );
     return;
   }
@@ -517,31 +531,36 @@ reactionsElement?.addEventListener("click", event => {
   }, "Реакцію збережено.");
 });
 
-pollElement?.querySelector("[data-poll-form]")?.addEventListener("submit", event => {
-  event.preventDefault();
-  const formData = new FormData(event.currentTarget);
-  const choices = formData.getAll("poll-choice");
-  if (
-    !choices.length ||
-    (!poll.multiple && choices.length !== 1) ||
-    choices.some(choice => !poll.options.some(option => option.id === choice))
-  ) {
-    showFeedbackStatus("Оберіть варіант відповіді перед голосуванням.", true);
-    return;
-  }
-  handleFeedbackAction(() => {
-    if (poll.ended || validPollVotes().some(vote => vote.ownerId === ownerId)) {
-      throw new Error("Ви вже голосували або опитування завершене.");
+pollElement
+  ?.querySelector("[data-poll-form]")
+  ?.addEventListener("submit", event => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const choices = formData.getAll("poll-choice");
+    if (
+      !choices.length ||
+      (!poll.multiple && choices.length !== 1) ||
+      choices.some(choice => !poll.options.some(option => option.id === choice))
+    ) {
+      showFeedbackStatus("Оберіть варіант відповіді перед голосуванням.", true);
+      return;
     }
-    const updated = [
-      ...validPollVotes(),
-      { ownerId, pollId: poll.id, choices },
-    ];
-    saveFeedbackRecords(feedbackStorageKeys.votes, updated);
-    pollVotes = updated;
-    renderPoll();
-  }, "Ваш голос зараховано. Дякуємо!");
-});
+    handleFeedbackAction(() => {
+      if (
+        poll.ended ||
+        validPollVotes().some(vote => vote.ownerId === ownerId)
+      ) {
+        throw new Error("Ви вже голосували або опитування завершене.");
+      }
+      const updated = [
+        ...validPollVotes(),
+        { ownerId, pollId: poll.id, choices },
+      ];
+      saveFeedbackRecords(feedbackStorageKeys.votes, updated);
+      pollVotes = updated;
+      renderPoll();
+    }, "Ваш голос зараховано. Дякуємо!");
+  });
 
 commentForm?.addEventListener("submit", event => {
   event.preventDefault();
@@ -549,7 +568,10 @@ commentForm?.addEventListener("submit", event => {
   const author = String(formData.get("author") || "").trim();
   const message = String(formData.get("message") || "").trim();
   if (author.length > 50 || message.length < 2 || message.length > 1000) {
-    showFeedbackStatus("Ім’я має бути до 50, а коментар — від 2 до 1000 символів.", true);
+    showFeedbackStatus(
+      "Ім’я має бути до 50, а коментар — від 2 до 1000 символів.",
+      true,
+    );
     return;
   }
   handleFeedbackAction(() => {
