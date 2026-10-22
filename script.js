@@ -132,8 +132,8 @@ const feedbackStorageKeys = {
   owner: "click-feedback-owner-v1",
 };
 const poll = {
-  id: "click-feature-priority-v1",
-  question: "Яка можливість CLICK для вас найважливіша?",
+  id: "u-invest-feature-priority-v1",
+  question: "Яка можливість U-Invest для вас найважливіша?",
   multiple: false,
   ended: false,
   options: [
