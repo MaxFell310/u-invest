@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Захищена панель керування відповідями U-Invest."
+    />
+    <meta name="u-invest-api-base-url" content="http://127.0.0.1:8000" />
+    <meta name="u-invest-supabase-url" content="" />
+    <meta name="u-invest-supabase-anon-key" content="" />
+    <title>Панель команди | U-Invest</title>
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="admin.js" defer></script>
+  </head>
+  <body class="admin-page">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="U-Invest">
+          <span class="brand-mark">U-Invest</span>
+        </a>
+        <a class="btn btn-secondary" href="index.html">На сайт</a>
+      </div>
+    </header>
+
+    <main class="section">
+      <div class="container admin-container">
+        <div class="section-heading">
+          <span class="eyebrow">Приватний доступ для команди</span>
+          <h1>Панель відповідей</h1>
+          <p>
+            Увійдіть за посиланням на електронну пошту, використовуючи
+            запрошений обліковий запис.
+          </p>
+        </div>
+
+        <p class="admin-status" data-admin-status role="status" aria-live="polite">
+          Перевіряємо налаштування входу…
+        </p>
+
+        <section class="admin-card" data-admin-login hidden>
+          <form class="feedback-form" data-admin-login-form>
+            <label>
+              Робоча електронна пошта
+              <input
+                type="email"
+                name="email"
+                autocomplete="email"
+                maxlength="254"
+                required
+              />
+            </label>
+            <button class="btn btn-primary" type="submit" data-admin-login-button>
+              Надіслати посилання для входу
+            </button>
+          </form>
+          <p class="feedback-hint">
+            Вхід доступний лише обліковим записам, запрошеним і дозволеним
+            власником проєкту.
+          </p>
+        </section>
+
+        <section data-admin-dashboard hidden>
+          <div class="admin-toolbar">
+            <p data-admin-identity></p>
+            <div class="admin-actions">
+              <button class="btn btn-secondary" type="button" data-admin-export>
+                Завантажити CSV
+              </button>
+              <button class="btn btn-secondary" type="button" data-admin-logout>
+                Вийти
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-stats" data-admin-stats aria-live="polite"></div>
+
+          <section class="admin-card">
+            <div class="admin-filter-grid">
+              <label>
+                Пошук у коментарях
+                <input type="search" data-filter-search maxlength="100" />
+              </label>
+              <label>
+                Оцінка
+                <select data-filter-rating>
+                  <option value="">Усі оцінки</option>
+                  <option value="5">5</option>
+                  <option value="4">4</option>
+                  <option value="3">3</option>
+                  <option value="2">2</option>
+                  <option value="1">1</option>
+                </select>
+              </label>
+              <label>
+                Інтерес до інвестицій
+                <select data-filter-interest>
+                  <option value="">Усі відповіді</option>
+                  <option value="yes">Так</option>
+                  <option value="maybe">Можливо</option>
+                  <option value="no">Ні</option>
+                </select>
+              </label>
+              <button class="btn btn-primary" type="button" data-filter-submit>
+                Застосувати
+              </button>
+            </div>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Надіслано</th>
+                    <th scope="col">Оцінка</th>
+                    <th scope="col">Інтерес</th>
+                    <th scope="col">Коментар</th>
+                    <th scope="col">Довкілля</th>
+                    <th scope="col">Соціальна відповідальність</th>
+                    <th scope="col">Етика</th>
+                  </tr>
+                </thead>
+                <tbody data-admin-feedback></tbody>
+              </table>
+            </div>
+            <div class="admin-pagination">
+              <button class="btn btn-secondary" type="button" data-page-previous>
+                Попередня
+              </button>
+              <span data-page-indicator></span>
+              <button class="btn btn-secondary" type="button" data-page-next>
+                Наступна
+              </button>
+            </div>
+          </section>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

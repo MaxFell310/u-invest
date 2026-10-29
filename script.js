@@ -11,7 +11,131 @@ const responsibleFilter = document.querySelector("[data-responsible-filter]");
 const assetCards = document.querySelectorAll(".app-asset-card[data-esg]");
 const esgBadges = document.querySelectorAll(".esg-badge");
 const modalMessage = modal?.querySelector("[data-modal-message]");
+const API_BASE_URL = (
+  window.U_INVEST_API_BASE_URL ||
+  document.querySelector('meta[name="u-invest-api-base-url"]')?.content ||
+  ""
+).replace(/\/+$/, "");
+const experimentHeadline = document.querySelector("[data-experiment-headline]");
+const analyticsStatus = document.querySelector("[data-analytics-status]");
+const primaryCta = document.querySelector("[data-primary-cta]");
+const experimentVisitorKey = "u-invest-experiment-visitor-v1";
+const uuidPattern =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 let modalReturnFocus = null;
+
+function showAnalyticsStatus(message) {
+  if (!analyticsStatus) return;
+  analyticsStatus.textContent = message;
+  analyticsStatus.hidden = !message;
+}
+
+function getExperimentVisitorId() {
+  try {
+    const storedId = window.localStorage.getItem(experimentVisitorKey);
+    if (storedId && uuidPattern.test(storedId)) return storedId;
+
+    const visitorId = window.crypto?.randomUUID?.();
+    if (!visitorId) return null;
+    window.localStorage.setItem(experimentVisitorKey, visitorId);
+    return visitorId;
+  } catch (error) {
+    if (error instanceof DOMException) return null;
+    throw error;
+  }
+}
+
+async function recordAnalyticsEvent(assignment, eventName) {
+  const eventId = window.crypto?.randomUUID?.();
+  if (!eventId) {
+    showAnalyticsStatus("Аналітичну подію не вдалося записати в цьому браузері.");
+    return;
+  }
+
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}/api/analytics/events`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event_id: eventId,
+        visitor_id: assignment.visitor_id,
+        experiment_name: assignment.experiment_name,
+        variant: assignment.variant,
+        event_name: eventName,
+      }),
+    });
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
+    showAnalyticsStatus("Аналітика тимчасово недоступна; сайт продовжує працювати.");
+    return;
+  }
+
+  if (!response.ok) {
+    showAnalyticsStatus(
+      `Не вдалося записати аналітичну подію (HTTP ${response.status}).`,
+    );
+    return;
+  }
+  showAnalyticsStatus("");
+}
+
+async function initializeExperiment() {
+  const visitorId = getExperimentVisitorId();
+  if (!visitorId) {
+    showAnalyticsStatus(
+      "A/B-тест недоступний у цьому браузері; сайт продовжує працювати.",
+    );
+    return null;
+  }
+
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}/api/experiments/assign`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ visitor_id: visitorId }),
+    });
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
+    showAnalyticsStatus("A/B-тест тимчасово недоступний; сайт продовжує працювати.");
+    return null;
+  }
+
+  if (!response.ok) {
+    showAnalyticsStatus(
+      `Не вдалося отримати варіант A/B-тесту (HTTP ${response.status}).`,
+    );
+    return null;
+  }
+
+  let assignment;
+  try {
+    assignment = await response.json();
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) throw error;
+    showAnalyticsStatus("Сервер повернув некоректні дані експерименту.");
+    return null;
+  }
+
+  if (
+    !["A", "B"].includes(assignment.variant) ||
+    typeof assignment.experiment_name !== "string"
+  ) {
+    showAnalyticsStatus("Сервер повернув некоректні дані експерименту.");
+    return null;
+  }
+
+  if (experimentHeadline) {
+    experimentHeadline.textContent =
+      assignment.variant === "A"
+        ? "Invest in Ukraine's Future"
+        : "Discover Investment Opportunities in Ukraine";
+  }
+  const visitorAssignment = { ...assignment, visitor_id: visitorId };
+  void recordAnalyticsEvent(visitorAssignment, "page_view");
+  return visitorAssignment;
+}
 
 if (fractionPicker) {
   const fractionSelect = fractionPicker.querySelector("[data-fraction-select]");
@@ -198,12 +322,17 @@ const pollElement = document.querySelector("[data-poll]");
 const commentForm = document.querySelector("[data-comment-form]");
 const commentList = document.querySelector("[data-comment-list]");
 const feedbackForm = document.querySelector("[data-feedback-form]");
+const sustainabilityCount = document.querySelector(
+  "[data-sustainability-count]",
+);
+const sustainabilityRows = document.querySelector(
+  "[data-sustainability-rows]",
+);
 const feedbackStorageKeys = {
   ratings: "click-feedback-ratings-v1",
   reactions: "click-feedback-reactions-v1",
   votes: "click-feedback-poll-votes-v1",
   comments: "click-feedback-comments-v1",
-  submissions: "click-feedback-submissions-v1",
   owner: "click-feedback-owner-v1",
 };
 const poll = {
@@ -223,7 +352,6 @@ let ratings = [];
 let reactions = [];
 let pollVotes = [];
 let comments = [];
-let submissions = [];
 let feedbackStorageReady = true;
 let experienceRating = 0;
 let editingCommentId = null;
@@ -256,11 +384,10 @@ try {
   reactions = readFeedbackRecords(feedbackStorageKeys.reactions);
   pollVotes = readFeedbackRecords(feedbackStorageKeys.votes);
   comments = readFeedbackRecords(feedbackStorageKeys.comments);
-  submissions = readFeedbackRecords(feedbackStorageKeys.submissions);
 } catch {
   feedbackStorageReady = false;
   showFeedbackStatus(
-    "Сховище браузера недоступне або містить пошкоджені дані. Перевірте налаштування браузера; взаємодія зі зворотним зв’язком тимчасово недоступна.",
+    "Сховище браузера недоступне або містить пошкоджені дані. Локальні оцінки, голоси та коментарі тимчасово недоступні; анонімне опитування надсилається окремо.",
     true,
   );
 }
@@ -671,47 +798,108 @@ commentForm?.addEventListener("submit", event => {
   }, "Коментар додано.");
 });
 
-feedbackForm?.addEventListener("submit", event => {
+const importanceLabels = {
+  not_important: "Зовсім не важливо",
+  slightly_important: "Мало важливо",
+  moderately_important: "Помірно важливо",
+  very_important: "Дуже важливо",
+  unsure: "Важко відповісти",
+};
+
+async function loadSustainabilitySummary() {
+  if (!sustainabilityCount || !sustainabilityRows) return;
+
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}/api/analytics/sustainability`);
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
+    sustainabilityCount.textContent =
+      "Результати тимчасово недоступні. Спробуйте пізніше.";
+    sustainabilityRows.replaceChildren();
+    return;
+  }
+
+  if (!response.ok) {
+    sustainabilityCount.textContent =
+      "Не вдалося завантажити результати опитування.";
+    sustainabilityRows.replaceChildren();
+    return;
+  }
+
+  const summary = await response.json();
+  sustainabilityCount.textContent = `Надіслано відповідей: ${summary.response_count}`;
+  const rows = Object.entries(importanceLabels).map(([value, label]) => {
+    const row = document.createElement("tr");
+    const responseLabel = document.createElement("th");
+    responseLabel.scope = "row";
+    responseLabel.textContent = label;
+    row.append(responseLabel);
+
+    ["environmental", "social", "ethical"].forEach(category => {
+      const cell = document.createElement("td");
+      cell.textContent = String(summary[category][value]);
+      row.append(cell);
+    });
+    return row;
+  });
+  sustainabilityRows.replaceChildren(...rows);
+}
+
+feedbackForm?.addEventListener("submit", async event => {
   event.preventDefault();
   const formData = new FormData(feedbackForm);
-  const type = String(formData.get("type") || "");
-  const subject = String(formData.get("subject") || "").trim();
-  const message = String(formData.get("message") || "").trim();
-  const allowedTypes = ["suggestion", "problem", "complaint", "general"];
-  if (
-    !allowedTypes.includes(type) ||
-    subject.length < 3 ||
-    subject.length > 100 ||
-    message.length < 10 ||
-    message.length > 2000
-  ) {
+  const payload = {
+    rating: experienceRating || null,
+    investment_interest: formData.get("investment_interest"),
+    comment: String(formData.get("comment") || "").trim() || null,
+    environmental_importance: formData.get("environmental_importance"),
+    social_importance: formData.get("social_importance"),
+    ethical_importance: formData.get("ethical_importance"),
+  };
+  const submitButton = feedbackForm.querySelector('button[type="submit"]');
+  if (submitButton) submitButton.disabled = true;
+
+  let response;
+  try {
+    response = await fetch(`${API_BASE_URL}/api/feedback`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
     showFeedbackStatus(
-      "Перевірте тип, тему (3–100 символів) і повідомлення (10–2000 символів).",
+      "Не вдалося з’єднатися з сервером. Перевірте підключення та спробуйте ще раз.",
+      true,
+    );
+    if (submitButton) submitButton.disabled = false;
+    return;
+  }
+
+  if (submitButton) submitButton.disabled = false;
+  if (!response.ok) {
+    showFeedbackStatus(
+      response.status === 422
+        ? "Перевірте відповіді: сервер не прийняв надіслані дані."
+        : `Не вдалося надіслати відповіді (HTTP ${response.status}). Спробуйте пізніше.`,
       true,
     );
     return;
   }
-  handleFeedbackAction(() => {
-    if (submissions.filter(item => item?.ownerId === ownerId).length >= 20) {
-      throw new Error("Досягнуто локального обмеження звернень.");
-    }
-    const updated = [
-      ...submissions,
-      {
-        ownerId,
-        type,
-        subject,
-        message,
-        rating: experienceRating || null,
-        createdAt: new Date().toISOString(),
-      },
-    ];
-    saveFeedbackRecords(feedbackStorageKeys.submissions, updated);
-    submissions = updated;
-    feedbackForm.reset();
-    experienceRating = 0;
-    updateStarButtons(experienceStars, experienceRating);
-  }, "Дякуємо! Ваш відгук збережено в цьому браузері.");
+
+  feedbackForm.reset();
+  experienceRating = 0;
+  updateStarButtons(experienceStars, experienceRating);
+  showFeedbackStatus("Дякуємо! Ваші відповіді надіслано.", false);
+  void loadSustainabilitySummary();
 });
 
 renderFeedback();
+void loadSustainabilitySummary();
+
+const experimentAssignmentPromise = initializeExperiment();
+primaryCta?.addEventListener("click", async () => {
+  const assignment = await experimentAssignmentPromise;
+  if (assignment) void recordAnalyticsEvent(assignment, "cta_click");
+});

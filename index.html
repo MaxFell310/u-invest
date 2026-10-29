@@ -7,6 +7,10 @@
       name="description"
       content="U-Invest — це fintech-концепція для доступних мікроінвестицій. Простий landing page MVP для стартапу, який допомагає почати інвестувати з невеликих сум."
     />
+    <meta
+      name="u-invest-api-base-url"
+      content="http://127.0.0.1:8000"
+    />
     <title>U-Invest | Інвестиції без бар’єрів</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,7 +18,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="styles/style.css" />
   </head>
   <body>
     <header class="site-header">
@@ -59,7 +63,7 @@
         <div class="container hero-grid">
           <div class="hero-copy reveal">
             <span class="eyebrow">U-Invest</span>
-            <h1>Інвестиції без бар’єрів.</h1>
+            <h1 data-experiment-headline>Інвестиції без бар’єрів.</h1>
             <p class="lead">
               Починайте інвестувати з невеликих сум. Просто, зрозуміло і в
               одному місці.
@@ -67,6 +71,7 @@
             <div class="hero-actions">
               <button
                 class="btn btn-primary"
+                data-primary-cta
                 onclick="
                   document
                     .getElementById('app-window')
@@ -77,6 +82,13 @@
               </button>
               <a class="btn btn-secondary" href="#how">Як це працює</a>
             </div>
+            <p
+              class="analytics-status"
+              data-analytics-status
+              role="status"
+              aria-live="polite"
+              hidden
+            ></p>
             <ul class="mini-stats" aria-label="Основні характеристики продукту">
               <li><strong>Small steps</strong><span>Мікроінвестиції</span></li>
               <li><strong>Clear flow</strong><span>Без зайвих кроків</span></li>
@@ -766,11 +778,10 @@
           </div>
 
           <p class="feedback-notice" role="note">
-            Це демонстраційний сайт: відгуки та голоси зберігаються лише у
-            сховищі цього браузера. Вони не надсилаються команді й не
-            синхронізуються між пристроями. Не вказуйте паролі, платіжні
-            реквізити чи інші секретні дані. Для спільного збору даних потрібен
-            backend.
+            Відповіді в новому опитуванні надсилаються до API й зберігаються
+            без ідентифікатора відвідувача. Інші оцінки, голоси та коментарі на
+            цій сторінці залишаються у сховищі цього браузера. Не вказуйте
+            паролі, платіжні реквізити чи інші секретні дані.
           </p>
           <p
             class="feedback-status"
@@ -901,38 +912,59 @@
             </article>
 
             <article class="feedback-card">
-              <span class="eyebrow">Зворотний зв’язок</span>
-              <h3>Надішліть відгук</h3>
+              <span class="eyebrow">Анонімне опитування</span>
+              <h3>Поділіться своїм ставленням до інвестування</h3>
               <form class="feedback-form" data-feedback-form>
                 <label>
-                  Тип звернення
-                  <select name="type" required>
-                    <option value="suggestion">Пропозиція</option>
-                    <option value="problem">Проблема</option>
-                    <option value="complaint">Скарга</option>
-                    <option value="general">Загальний відгук</option>
+                  Чи хотіли б ви дізнатися більше про інвестиційні можливості в
+                  Україні?
+                  <select name="investment_interest" required>
+                    <option value="" selected disabled>Оберіть відповідь</option>
+                    <option value="yes">Так</option>
+                    <option value="maybe">Можливо</option>
+                    <option value="no">Ні</option>
                   </select>
                 </label>
                 <label>
-                  Тема
-                  <input
-                    name="subject"
-                    type="text"
-                    minlength="3"
-                    maxlength="100"
-                    required
-                    placeholder="Коротко про звернення"
-                  />
+                  Наскільки важливий для вас вплив інвестицій на довкілля?
+                  <select name="environmental_importance" required>
+                    <option value="" selected disabled>Оберіть відповідь</option>
+                    <option value="not_important">Зовсім не важливо</option>
+                    <option value="slightly_important">Мало важливо</option>
+                    <option value="moderately_important">Помірно важливо</option>
+                    <option value="very_important">Дуже важливо</option>
+                    <option value="unsure">Важко відповісти</option>
+                  </select>
                 </label>
                 <label>
-                  Повідомлення
+                  Наскільки важлива для вас соціальна відповідальність?
+                  <select name="social_importance" required>
+                    <option value="" selected disabled>Оберіть відповідь</option>
+                    <option value="not_important">Зовсім не важливо</option>
+                    <option value="slightly_important">Мало важливо</option>
+                    <option value="moderately_important">Помірно важливо</option>
+                    <option value="very_important">Дуже важливо</option>
+                    <option value="unsure">Важко відповісти</option>
+                  </select>
+                </label>
+                <label>
+                  Наскільки важливі для вас етичні практики бізнесу?
+                  <select name="ethical_importance" required>
+                    <option value="" selected disabled>Оберіть відповідь</option>
+                    <option value="not_important">Зовсім не важливо</option>
+                    <option value="slightly_important">Мало важливо</option>
+                    <option value="moderately_important">Помірно важливо</option>
+                    <option value="very_important">Дуже важливо</option>
+                    <option value="unsure">Важко відповісти</option>
+                  </select>
+                </label>
+                <label>
+                  Коментар <span class="optional-label">(необов’язково)</span>
                   <textarea
-                    name="message"
+                    name="comment"
                     rows="4"
-                    minlength="10"
-                    maxlength="2000"
-                    required
-                    placeholder="Опишіть вашу пропозицію або проблему"
+                    maxlength="1000"
+                    placeholder="Ваші думки або пропозиції"
                   ></textarea>
                 </label>
                 <fieldset class="experience-rating">
@@ -981,9 +1013,45 @@
                   </div>
                 </fieldset>
                 <button class="btn btn-primary" type="submit">
-                  Надіслати відгук
+                  Надіслати відповіді
                 </button>
               </form>
+            </article>
+
+            <article
+              class="feedback-card sustainability-results"
+              data-sustainability-summary
+            >
+              <span class="eyebrow">Зведені результати</span>
+              <h3>Ставлення до відповідального інвестування</h3>
+              <p
+                class="feedback-muted sustainability-count"
+                data-sustainability-count
+                aria-live="polite"
+              >
+                Завантаження результатів…
+              </p>
+              <div class="table-scroll">
+                <table class="sustainability-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Важливість</th>
+                      <th scope="col">Довкілля</th>
+                      <th scope="col">Соціальна відповідальність</th>
+                      <th scope="col">Етичні практики</th>
+                    </tr>
+                  </thead>
+                  <tbody data-sustainability-rows>
+                    <tr>
+                      <td colspan="4">Завантаження…</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="feedback-hint">
+                Це розподіл фактично надісланих відповідей; він не оцінює
+                конкретні інвестиційні продукти.
+              </p>
             </article>
           </div>
         </div>
@@ -1028,6 +1096,7 @@
           <a href="#feedback">Відгуки</a>
           <a href="#faq">FAQ</a>
           <a href="#business">Для бізнесу</a>
+          <a href="admin.html">Панель команди</a>
         </nav>
       </div>
 

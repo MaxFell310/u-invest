@@ -1,0 +1,28 @@
+[project]
+name = "u-invest"
+version = "0.1.0"
+description = "U-Invest MVP backend"
+readme = "README.md"
+authors = [
+    { name = "MaxFell", email = "67173616+MaxFell310@users.noreply.github.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi[standard]>=0.162.0",
+    "alembic>=1.15.0",
+    "psycopg[binary]>=3.2.0",
+    "pyjwt[crypto]>=2.10.0",
+    "sqlalchemy>=2.0,<2.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+[project.scripts]
+u-invest = "u_invest.main:run"
+
+[build-system]
+requires = ["uv_build>=0.12.15,<0.13.0"]
+build-backend = "uv_build"
