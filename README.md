@@ -238,6 +238,16 @@ rate is unique assigned visitors with one or more CTA clicks divided by
 assigned visitors in that variant. With no assigned visitors, the rate is
 zero.
 
+The server stores A/B assignments and analytics events in the configured
+database. The anonymous `/api/feedback` survey separately stores its optional
+1–5 experience rating, investment-interest answer, environmental/social/ethical
+answers, optional comment, and submission timestamp; it does not store the A/B
+visitor ID. The older page-rating widget, reactions, feature-poll votes, and
+comments are stored only in that visitor's browser `localStorage`. They are
+not sent to the server and are not synchronized across browsers or users.
+Moving those older interactions to shared results would require separate API
+and database work.
+
 Assignments and client-submitted events can be manipulated. Clearing browser
 storage or using another device can create another identifier; there is no
 fingerprinting, account verification, or reliable bot detection. Counts
@@ -250,11 +260,13 @@ do not fabricate participants, findings, or conclusions.
 
 ## Frontend configuration and CORS
 
-The public site's API base URL is the `u-invest-api-base-url` meta tag in
-`index.html`; `admin.html` has the same API setting plus Supabase project URL
-and public key settings. These are static files, so production values must be
-set in the files deployed to GitHub Pages; backend `.env` variables do not
-change GitHub Pages content.
+Both frontend pages load the shared `api-config.js`. It selects the local API
+(`http://127.0.0.1:8000`) only when served from `localhost`, `127.0.0.1`, or
+`[::1]`; all other hosts use `https://u-invest-fastapi.onrender.com`. No API
+URL is duplicated in the HTML pages, and no credentials are included in this
+configuration. The public Supabase project URL and publishable/anon key for
+the admin page are separate public client settings; they do not grant
+administrative API access.
 
 Local CORS defaults are `http://localhost:5500` and
 `http://127.0.0.1:5500`. Set production
@@ -289,17 +301,22 @@ settings, apply `uv run alembic upgrade head` as a release step, and run
 `uv run u-invest` (or the host's equivalent start command). Ensure the host
 routes HTTPS to FastAPI.
 
-Before deploying the frontend, set `index.html`'s API base to the backend's
-HTTPS origin. Set `admin.html`'s API base, Supabase URL, and public
-publishable/anon key. In Supabase Auth, configure the exact dashboard redirect
-URL and invite collaborators as described above.
+The API base requires no per-deployment edit: `api-config.js` selects Render
+for GitHub Pages and localhost for local development. Before deploying the
+admin dashboard, set its `u-invest-supabase-url` and
+`u-invest-supabase-anon-key` meta tags in `admin.html` to the project's public
+Supabase URL and publishable/anon key. These values are currently empty in the
+repository, so the dashboard sign-in is not production-ready until they are
+configured. In Supabase Auth, configure the exact dashboard redirect URL and
+invite collaborators as described above.
 
-No Supabase project, backend host, production API URL, or credentials are
-configured in this repository. Therefore the production connection and
-submission/retrieval workflow are **prepared but unverified**. After
-provisioning, verify a real HTTPS feedback submission, persistence after API
-restart, and access by a separately invited collaborator before claiming
-production operation.
+The deployed Render API was checked for health, aggregate reads, OpenAPI
+routes, and CORS preflight; protected feedback routes correctly rejected
+requests without a token. A production feedback submission and retrieval by an
+authorized collaborator were not performed during this verification to avoid
+adding test data or using collaborator credentials. Verify those workflows
+with an explicitly identified test submission and invited collaborator before
+claiming end-to-end production verification.
 
 ## Testing
 

@@ -2,9 +2,7 @@ const adminStatus = document.querySelector("[data-admin-status]");
 const loginPanel = document.querySelector("[data-admin-login]");
 const dashboard = document.querySelector("[data-admin-dashboard]");
 const loginForm = document.querySelector("[data-admin-login-form]");
-const apiBaseUrl = (
-  document.querySelector('meta[name="u-invest-api-base-url"]')?.content || ""
-).replace(/\/+$/, "");
+const apiBaseUrl = (window.U_INVEST_API_BASE_URL || "").replace(/\/+$/, "");
 const supabaseUrl =
   document.querySelector('meta[name="u-invest-supabase-url"]')?.content || "";
 const supabaseAnonKey =
