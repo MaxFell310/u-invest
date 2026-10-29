@@ -7,8 +7,18 @@
       name="description"
       content="Захищена панель керування відповідями U-Invest."
     />
-    <meta name="u-invest-supabase-url" content="" />
-    <meta name="u-invest-supabase-anon-key" content="" />
+    <meta
+      name="u-invest-api-base-url"
+      content="https://u-invest-fastapi.onrender.com"
+    />
+    <meta
+      name="u-invest-supabase-url"
+      content="https://tybfamlmqipyeqouklru.supabase.co"
+    />
+    <meta
+      name="u-invest-supabase-anon-key"
+      content="sb_publishable_NVK-8-CInOQ1jB3PvtNffA_9Low-ZCy"
+    />
     <title>Панель команди | U-Invest</title>
     <link rel="stylesheet" href="styles/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -36,7 +46,12 @@
           </p>
         </div>
 
-        <p class="admin-status" data-admin-status role="status" aria-live="polite">
+        <p
+          class="admin-status"
+          data-admin-status
+          role="status"
+          aria-live="polite"
+        >
           Перевіряємо налаштування входу…
         </p>
 
@@ -52,7 +67,11 @@
                 required
               />
             </label>
-            <button class="btn btn-primary" type="submit" data-admin-login-button>
+            <button
+              class="btn btn-primary"
+              type="submit"
+              data-admin-login-button
+            >
               Надіслати посилання для входу
             </button>
           </form>
@@ -125,7 +144,11 @@
               </table>
             </div>
             <div class="admin-pagination">
-              <button class="btn btn-secondary" type="button" data-page-previous>
+              <button
+                class="btn btn-secondary"
+                type="button"
+                data-page-previous
+              >
                 Попередня
               </button>
               <span data-page-indicator></span>
