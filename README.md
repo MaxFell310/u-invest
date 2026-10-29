@@ -116,6 +116,48 @@ uv run --env-file .env alembic upgrade head
 The health endpoint returns HTTP 503 with the migration command if required
 tables are missing. It does not create or alter the database schema.
 
+### Initialize a new production database
+
+After setting `U_INVEST_DATABASE_URL` to the Supabase PostgreSQL connection URL
+and `U_INVEST_ENV=production` in the deployment environment, run this once from
+the repository root:
+
+```powershell
+uv run alembic upgrade head
+```
+
+For a local PowerShell terminal using a private, ignored `.env` file containing
+the production database URL, explicitly select production mode without putting
+the URL in the command or source code:
+
+```powershell
+$env:U_INVEST_ENV = "production"
+uv run --env-file .env alembic upgrade head
+if ($LASTEXITCODE -ne 0) { throw "Database migration failed." }
+Remove-Item Env:U_INVEST_ENV
+```
+
+This applies pending Alembic revisions to the database selected by
+`U_INVEST_DATABASE_URL`; it is safe to rerun and does not drop tables or clear
+rows. Do not run it until the URL is configured for the intended database.
+Keep the URL in the ignored `.env` file or the host's secret environment
+settings, and do not paste it into logs or screenshots.
+
+To check that every table registered by the SQLAlchemy models exists in that
+same database without printing its connection URL:
+
+```powershell
+$env:U_INVEST_ENV = "production"
+uv run --env-file .env python -c "from sqlalchemy import inspect; from u_invest.database import engine; from u_invest.models import Base; present=set(inspect(engine).get_table_names()); missing=set(Base.metadata.tables)-present; print('Database schema: OK' if not missing else f'Missing tables: {sorted(missing)}'); raise SystemExit(bool(missing))"
+if ($LASTEXITCODE -ne 0) { throw "Database schema check failed." }
+Remove-Item Env:U_INVEST_ENV
+```
+
+When the API is running, `GET /api/health` provides the same schema-readiness
+check and returns HTTP 200 only when the database is reachable and all model
+tables exist. A missing table returns HTTP 503; run the migration command above
+against the same database URL configured for Render.
+
 Inspect the current migration:
 
 ```powershell

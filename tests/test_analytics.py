@@ -7,6 +7,15 @@ from pytest import approx
 from u_invest.constants import EXPERIMENT_NAME
 from u_invest.database import create_database_engine
 from u_invest.main import create_app
+from u_invest.models import Base
+
+
+def test_all_application_models_are_registered_for_migrations() -> None:
+    assert set(Base.metadata.tables) == {
+        "analytics_events",
+        "experiment_assignments",
+        "feedback",
+    }
 
 
 def assign(client: TestClient, visitor_id: str) -> dict[str, str]:
