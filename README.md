@@ -412,4 +412,7 @@ uv run --group dev pytest -q
 ```
 
 Tests use isolated SQLite databases and mock Supabase token verification; they
-do not require production credentials or modify `u_invest.db`.
+do not require production credentials or modify `u_invest.db`. The same run
+also checks frontend HTML/CSS links, GitHub Pages base paths, and centralized
+page routes. Check JavaScript syntax with `node --check` on the files in
+`assets/js/`.

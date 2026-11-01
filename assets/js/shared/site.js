@@ -1,20 +1,6 @@
 (() => {
-  const siteRoot = window.U_INVEST_SITE_ROOT || "./";
   const sitePath = path => window.UInvestPaths.href(path);
-  const links = {
-    home: "index.html",
-    about: "index.html#about",
-    how: "index.html#how",
-    features: "index.html#features",
-    responsible: "index.html#responsible",
-    feedback: "index.html#feedback",
-    faq: "index.html#faq",
-    start: "index.html#app-window",
-    login: "pages/auth/login.html",
-    register: "pages/auth/register.html",
-    profile: "pages/profile/profile.html",
-    portfolio: "pages/profile/profile.html#portfolio",
-  };
+  const links = window.UInvestPaths.routes;
 
   async function loadHeader() {
     const placeholder = document.querySelector("[data-site-header]");
@@ -27,12 +13,12 @@
     template.innerHTML = await response.text();
     const header = template.content.querySelector("[data-shared-header]");
     if (!header) throw new Error("Спільний компонент навігації пошкоджений.");
-    header.querySelectorAll("[data-site-link]").forEach(link => {
+    header.querySelector("[data-brand-icon]").src = sitePath("logo/logo.jpg");
+    placeholder.replaceWith(header);
+    document.querySelectorAll("[data-site-link]").forEach(link => {
       const path = links[link.dataset.siteLink];
       if (path) link.href = sitePath(path);
     });
-    header.querySelector("[data-brand-icon]").src = sitePath("logo/logo.jpg");
-    placeholder.replaceWith(header);
     await initializeHeader(header);
   }
 
