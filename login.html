@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Вхід до особистого кабінету U-Invest." />
+    <title>Вхід | U-Invest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="api-config.js" defer></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="site.js" defer></script>
+    <script src="auth-pages.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="U-Invest, головна">
+          <span class="brand-mark">U-Invest</span>
+        </a>
+        <div class="header-tools">
+          <section class="exchange-rates" data-exchange-rates aria-label="Готівкові курси ПриватБанку">
+            <span class="exchange-provider">ПриватБанк</span>
+            <div class="exchange-rate-row" data-rate="USD" hidden><strong>USD / UAH</strong><span>Купівля <b data-buy>—</b></span><span>Продаж <b data-sale>—</b></span></div>
+            <div class="exchange-rate-row" data-rate="EUR" hidden><strong>EUR / UAH</strong><span>Купівля <b data-buy>—</b></span><span>Продаж <b data-sale>—</b></span></div>
+            <small data-rates-status role="status" aria-live="polite">Завантаження курсів…</small>
+          </section>
+          <div class="account-menu-wrap">
+            <button class="account-menu-toggle" type="button" data-account-toggle aria-expanded="false" aria-controls="account-menu" aria-haspopup="menu" aria-label="Відкрити меню акаунта"><span aria-hidden="true">☰</span></button>
+            <div class="account-menu" id="account-menu" data-account-menu role="menu" hidden>
+              <div data-anonymous-links><a href="login.html" role="menuitem">Увійти</a><a href="register.html" role="menuitem">Зареєструватися</a><a href="index.html" role="menuitem">Головна сторінка</a></div>
+              <div data-authenticated-links hidden><a href="profile.html" role="menuitem">Мій кабінет</a><a href="profile.html#portfolio" role="menuitem">Мій портфель</a><button type="button" role="menuitem" data-site-logout>Вийти</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="section auth-section">
+      <div class="container auth-container">
+        <span class="eyebrow">Особистий кабінет U-Invest</span>
+        <h1>Увійти</h1>
+        <p>Використовуйте свою адресу електронної пошти та пароль.</p>
+        <p class="form-status" data-auth-status role="status" aria-live="polite" hidden></p>
+        <form class="feedback-form auth-form" data-auth-form data-auth-mode="login">
+          <label>Email<input type="email" name="email" autocomplete="email" maxlength="254" required /></label>
+          <label>Пароль<input type="password" name="password" autocomplete="current-password" required /></label>
+          <button class="btn btn-primary" type="submit">Увійти</button>
+        </form>
+        <details class="recovery-details">
+          <summary>Забули пароль?</summary>
+          <form class="feedback-form" data-recovery-form>
+            <label>Email<input type="email" name="email" autocomplete="email" maxlength="254" required /></label>
+            <button class="btn btn-secondary" type="submit">Надіслати посилання для відновлення</button>
+          </form>
+        </details>
+        <p class="auth-switch">Ще не маєте акаунта? <a href="register.html">Зареєструватися</a></p>
+        <p class="demo-notice">Демо / Віртуальний портфель. Реальних платежів та біржових угод немає.</p>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,14 +1,17 @@
 # U-Invest MVP
 
 U-Invest is a static Ukrainian-language product concept with a FastAPI API for
-an A/B headline experiment, anonymous feedback, aggregate reporting, and a
-private collaborator dashboard. The page is a demonstration; it does not
-execute financial transactions or provide investment recommendations.
+an A/B headline experiment, anonymous feedback, aggregate reporting, a private
+collaborator dashboard, and a user-owned demo portfolio. Portfolio balances and
+trades are virtual only; the app does not execute financial transactions or
+provide investment recommendations.
 
 ## Architecture
 
 - `index.html`, `styles/style.css`, and `script.js` preserve the public static
-  website. `admin.html` and `admin.js` provide the protected team dashboard.
+  website. `login.html`, `register.html`, `reset-password.html`, and
+  `profile.html` provide the Supabase Auth and virtual portfolio flows.
+  `admin.html` and `admin.js` provide the separate protected team dashboard.
 - The existing `uv` project at the repository root builds the
   `src/u_invest` package; there is no second Python project.
 - `src/u_invest/main.py` configures FastAPI and registers the `/api` routers.
@@ -20,10 +23,12 @@ execute financial transactions or provide investment recommendations.
   `services/` contains analytics, token verification, and CSV logic, and
   `migrations/` contains Alembic revisions.
 - Local development uses SQLite. Production is configured for hosted
-  PostgreSQL using psycopg. Supabase Auth issues individual collaborator
-  tokens; raw feedback and CSV endpoints require an allowlisted user UUID.
+  PostgreSQL using psycopg. Supabase Auth issues user tokens; each portfolio
+  request is scoped to the verified JWT subject. Raw feedback and CSV
+  endpoints remain restricted to the separate team UUID allowlist.
 - Public survey submissions do not request names, email, IP addresses, or
-  browser fingerprints. Supabase Auth is only used for private team access.
+  browser fingerprints. Supabase Auth serves both public user accounts and
+  team accounts, with backend authorization kept separate.
 
 Technologies: Python 3.14+, FastAPI, Pydantic, SQLAlchemy 2.0, Alembic,
 PostgreSQL/psycopg, optional SQLite, Supabase Auth, vanilla HTML/CSS/JavaScript,
@@ -76,8 +81,9 @@ FastAPI's interactive Swagger UI is at
 `http://127.0.0.1:8000/openapi.json`; ReDoc is at
 `http://127.0.0.1:8000/redoc`. API routes use `/api`. Endpoint schemas,
 examples, and validation/authentication errors appear in the documentation.
-Public endpoints can be executed in Swagger. To try protected endpoints,
-authorize with a valid Supabase access token for an allowlisted collaborator.
+Public endpoints can be executed in Swagger. Portfolio endpoints accept any
+valid Supabase user access token; the admin and full analytics export endpoints
+require an allowlisted collaborator token.
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -91,10 +97,31 @@ authorize with a valid Supabase access token for an allowlisted collaborator.
 | `GET` | `/api/admin/feedback/summary` | Protected feedback and sustainability statistics |
 | `GET` | `/api/admin/feedback/export` | Protected feedback-only CSV |
 | `GET` | `/api/analytics/export` | Protected full research CSV, including anonymous visitor IDs |
+| `GET` | `/api/exchange-rates` | Cached USD/EUR cash rates from PrivatBank; returns stale data or HTTP 503 when unavailable |
+| `GET` | `/api/profile` | Authenticated user's profile, refreshed from verified Supabase JWT claims |
+| `GET` | `/api/portfolio` | Authenticated user's demo balance, positions, and virtual account value |
+| `GET` | `/api/portfolio/transactions` | Authenticated user's recent virtual transaction history |
+| `POST` | `/api/portfolio/demo-deposits` | Idempotently adds virtual demo funds; no payment is made |
+| `POST` | `/api/portfolio/trades` | Idempotently records a virtual buy or sell using an explicitly entered demo price |
 
 `/api/feedback` only accepts new validated responses; there is no public
 feedback-list endpoint. Raw comments and CSV exports are restricted to
 authorized collaborators. CSV responses use `Cache-Control: no-store`.
+
+All portfolio routes require `Authorization: Bearer <Supabase access token>`.
+The server verifies the token's issuer, audience, signature, expiration, and
+UUID subject, and derives ownership exclusively from that subject (never from
+frontend `user_id`). Database operations use PostgreSQL row locks and a unique
+per-user `request_id`; insufficient demo cash or shares are rejected atomically.
+The account starts at USD 0.00. The demo deposit action only credits virtual
+funds. Demo trade prices are entered by the user and are not market quotes;
+portfolio valuation is based on invested cost only, with no unrealized return.
+
+The exchange-rate endpoint fetches PrivatBank's cash-rate API with a five
+second timeout, validates both UAH-base USD and EUR rates, and caches successful
+results for ten minutes. If a refresh fails, the last successful response is
+returned with `stale: true`; without a cached response the endpoint returns
+HTTP 503. These rates are never used as stock prices.
 
 ## Database and migrations
 
@@ -106,6 +133,14 @@ backend host. For PostgreSQL, use the SQLAlchemy psycopg scheme
 normalized by the application. In production, the app requires PostgreSQL and
 adds `sslmode=require` if it is missing. `pool_pre_ping` and connection recycle
 are enabled; Supabase pooler hosts disable psycopg prepared statements.
+
+Alembic revision `8a32f6d1c907_add_user_demo_portfolios` adds the tables
+`user_profiles`, `demo_wallets`, `portfolio_positions`, and
+`portfolio_transactions`. It does not alter the applied initial revision.
+Amounts use `Numeric`/`Decimal`; every portfolio row is keyed by the verified
+Supabase Auth UUID. FastAPI is the only database access path for these records,
+so no browser-side Supabase Data API/RLS access is used. Do not apply this
+revision to production until the migration is explicitly approved.
 
 Apply migrations before starting the API:
 
@@ -188,32 +223,36 @@ rating/interest/sustainability filters available from the API. The page shows
 submission time, rating, interest, comment, all three sustainability answers,
 aggregated counts, and a CSV export.
 
-### Supabase Auth invitations and permissions
+### Supabase Auth users and team permissions
 
-1. Create a Supabase project and configure email delivery in Supabase Auth.
-   Disable public sign-ups; use invited accounts only.
-2. In **Supabase → Authentication → Users**, invite each collaborator to their
-   own email address. Each person signs in to `admin.html` using their emailed
-   sign-in link; there is no shared admin password.
+1. Configure email delivery and enable email/password sign-up for ordinary
+   users. Keep email confirmation enabled; do not disable Supabase confirmation
+   to simplify testing.
+2. Keep the existing team workflow: in **Supabase → Authentication → Users**,
+   invite each collaborator to their own address. They sign in to `admin.html`
+   using the existing emailed Magic Link.
 3. Copy each invited user's Auth UUID. Set backend environment variable
    `U_INVEST_ADMIN_USER_IDS` to the comma-separated UUIDs authorized to read
-   data, then redeploy/restart the API. Removing a UUID revokes API access on
-   the next request.
-4. Configure the `u-invest-supabase-url` and
-   `u-invest-supabase-anon-key` meta tags in `admin.html` with the public
-   Supabase project URL and publishable/anon key. These are public client
-   settings. Never put the database password, service-role key, JWT signing
-   secret, or other administrative secret in frontend code.
-5. In Supabase Auth URL configuration, allow the dashboard redirect URLs
-   `https://maxfell310.github.io/u-invest/admin.html` and
-   `http://127.0.0.1:5500/admin.html` for local testing.
+   feedback, then deploy/restart the API. This list is for team access only;
+   ordinary registration never adds a user to it.
+4. `api-config.js` contains the public Supabase project URL and publishable
+   key used by the shared `supabase-config.js` client. These are public client
+   settings, not secrets. Never put the database password, service-role key,
+   JWT signing secret, or other administrative secret in frontend code.
+5. In **Supabase → Authentication → URL Configuration → Redirect URLs**, add:
+   - `https://maxfell310.github.io/u-invest/login.html`
+   - `https://maxfell310.github.io/u-invest/reset-password.html`
+   - `https://maxfell310.github.io/u-invest/admin.html`
+   - `http://127.0.0.1:5500/login.html`
+   - `http://127.0.0.1:5500/reset-password.html`
+   - `http://127.0.0.1:5500/admin.html`
 
 The API verifies the token's signature against Supabase's published JWKS and
-checks issuer, audience, and the allowlisted `sub` UUID. Configure Supabase
-Auth to issue asymmetric ES256 or RS256 tokens for JWKS verification. The UI
-does not implement public account registration; `shouldCreateUser` is disabled.
-The backend allowlist remains the authorization boundary even if an unapproved
-account obtains a valid Supabase login.
+checks issuer, audience, and the JWT `sub` UUID. Configure Supabase Auth to
+issue asymmetric ES256 or RS256 tokens for JWKS verification. Portfolio access
+allows any valid authenticated user but only exposes data owned by that
+verified subject. The admin API additionally requires the team allowlist;
+`admin.js` continues using `signInWithOtp({ shouldCreateUser: false })`.
 
 Git repository permissions and feedback access are separate. A collaborator
 who only needs research results gets an individual Supabase Auth account and
@@ -260,18 +299,18 @@ do not fabricate participants, findings, or conclusions.
 
 ## Frontend configuration and CORS
 
-Both frontend pages load the shared `api-config.js`. It selects the local API
+Frontend pages load the shared `api-config.js` and singleton
+`supabase-config.js`. `api-config.js` selects the local API
 (`http://127.0.0.1:8000`) only when served from `localhost`, `127.0.0.1`, or
 `[::1]`; all other hosts use `https://u-invest-fastapi.onrender.com`. No API
-URL is duplicated in the HTML pages, and no credentials are included in this
-configuration. The public Supabase project URL and publishable/anon key for
-the admin page are separate public client settings; they do not grant
-administrative API access.
+URL is duplicated in the HTML pages. The Supabase publishable key is public
+and does not grant administrative API access; the service-role key is never
+used by the frontend.
 
 Local CORS defaults are `http://localhost:5500` and
 `http://127.0.0.1:5500`. Set production
 `U_INVEST_CORS_ORIGINS=https://maxfell310.github.io` on the backend. The API
-allows `Authorization` for the dashboard but does not enable cookie
+allows `Authorization` for authenticated user and team requests but does not enable cookie
 credentials. Never use wildcard CORS. CORS is not authentication.
 
 ## Production deployment
@@ -302,13 +341,11 @@ settings, apply `uv run alembic upgrade head` as a release step, and run
 routes HTTPS to FastAPI.
 
 The API base requires no per-deployment edit: `api-config.js` selects Render
-for GitHub Pages and localhost for local development. Before deploying the
-admin dashboard, set its `u-invest-supabase-url` and
-`u-invest-supabase-anon-key` meta tags in `admin.html` to the project's public
-Supabase URL and publishable/anon key. These values are currently empty in the
-repository, so the dashboard sign-in is not production-ready until they are
-configured. In Supabase Auth, configure the exact dashboard redirect URL and
-invite collaborators as described above.
+for GitHub Pages and localhost for local development. Verify the centralized
+public Supabase URL and publishable key in `api-config.js` match the intended
+project, configure the redirect URLs, and invite the authorized collaborators
+as described above. No production Auth setting or database migration was
+changed by this code update.
 
 The deployed Render API was checked for health, aggregate reads, OpenAPI
 routes, and CORS preflight; protected feedback routes correctly rejected

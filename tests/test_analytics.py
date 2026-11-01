@@ -13,8 +13,12 @@ from u_invest.models import Base
 def test_all_application_models_are_registered_for_migrations() -> None:
     assert set(Base.metadata.tables) == {
         "analytics_events",
+        "demo_wallets",
         "experiment_assignments",
         "feedback",
+        "portfolio_positions",
+        "portfolio_transactions",
+        "user_profiles",
     }
 
 

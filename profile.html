@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Особистий кабінет і віртуальний портфель U-Invest." />
+    <title>Мій кабінет | U-Invest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="api-config.js" defer></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="site.js" defer></script>
+    <script src="profile.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="U-Invest, головна"><span class="brand-mark">U-Invest</span></a>
+        <div class="header-tools">
+          <section class="exchange-rates" data-exchange-rates aria-label="Готівкові курси ПриватБанку">
+            <span class="exchange-provider">ПриватБанк</span>
+            <div class="exchange-rate-row" data-rate="USD" hidden><strong>USD / UAH</strong><span>Купівля <b data-buy>—</b></span><span>Продаж <b data-sale>—</b></span></div>
+            <div class="exchange-rate-row" data-rate="EUR" hidden><strong>EUR / UAH</strong><span>Купівля <b data-buy>—</b></span><span>Продаж <b data-sale>—</b></span></div>
+            <small data-rates-status role="status" aria-live="polite">Завантаження курсів…</small>
+          </section>
+          <div class="account-menu-wrap">
+            <button class="account-menu-toggle" type="button" data-account-toggle aria-expanded="false" aria-controls="account-menu" aria-haspopup="menu" aria-label="Відкрити меню акаунта"><span aria-hidden="true">☰</span></button>
+            <div class="account-menu" id="account-menu" data-account-menu role="menu" hidden>
+              <div data-anonymous-links><a href="login.html" role="menuitem">Увійти</a><a href="register.html" role="menuitem">Зареєструватися</a><a href="index.html" role="menuitem">Головна сторінка</a></div>
+              <div data-authenticated-links hidden><a href="profile.html" role="menuitem">Мій кабінет</a><a href="#portfolio" role="menuitem">Мій портфель</a><button type="button" role="menuitem" data-site-logout>Вийти</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="section profile-section">
+      <div class="container profile-container">
+        <span class="eyebrow">Демо / Віртуальний портфель</span>
+        <div class="profile-heading">
+          <div><h1>Мій кабінет</h1><p>Навчальний симулятор. Усі кошти й операції віртуальні.</p></div>
+          <button class="btn btn-secondary" type="button" data-profile-logout>Вийти</button>
+        </div>
+        <p class="form-status" data-profile-status role="status" aria-live="polite">Завантаження кабінету…</p>
+        <div data-profile-content hidden>
+          <section class="profile-card user-card" aria-labelledby="user-title">
+            <div><span class="eyebrow">Ваш акаунт</span><h2 id="user-title" data-user-name>—</h2></div>
+            <dl><div><dt>Email</dt><dd data-user-email>—</dd></div><div><dt>Дата реєстрації</dt><dd data-user-created>—</dd></div></dl>
+          </section>
+          <section class="balance-grid" aria-label="Демо-баланс">
+            <article class="profile-card balance-card"><span>Доступний демобаланс</span><strong data-balance>$0.00</strong></article>
+            <article class="profile-card balance-card"><span>Вартість віртуального портфеля (за сумою вкладень)</span><strong data-portfolio-value>$0.00</strong></article>
+            <article class="profile-card balance-card"><span>Загальна віртуальна вартість рахунку</span><strong data-account-value>$0.00</strong></article>
+          </section>
+          <div class="profile-actions-grid">
+            <section class="profile-card">
+              <h2>Поповнити деморахунок</h2>
+              <p>Додає лише віртуальні кошти для тестування. Платіж не виконується.</p>
+              <form class="feedback-form" data-deposit-form>
+                <label>Сума в USD<input type="number" name="amount" min="0.01" max="1000000" step="0.01" required /></label>
+                <button class="btn btn-primary" type="submit">Поповнити демобаланс</button>
+              </form>
+            </section>
+            <section class="profile-card">
+              <h2>Віртуальна операція</h2>
+              <p>Введена демоціна не є ринковим котируванням. Реальні акції не купуються.</p>
+              <form class="feedback-form" data-trade-form>
+                <label>Операція<select name="side" required><option value="buy">Демо-купівля</option><option value="sell">Демо-продаж</option></select></label>
+                <label>Тікер<input type="text" name="ticker" pattern="[A-Za-z][A-Za-z0-9.-]{0,11}" maxlength="12" required /></label>
+                <label>Компанія<input type="text" name="company" maxlength="100" required /></label>
+                <label>Кількість<input type="number" name="quantity" min="0.000001" step="0.000001" required /></label>
+                <label>Демоціна за акцію, USD<input type="number" name="unit_price" min="0.000001" step="0.000001" required /></label>
+                <button class="btn btn-primary" type="submit">Записати демооперацію</button>
+              </form>
+            </section>
+          </div>
+          <section class="profile-card" id="portfolio">
+            <div class="profile-section-heading"><div><span class="eyebrow">Віртуальні активи</span><h2>Мої акції</h2></div></div>
+            <div class="table-scroll">
+              <table class="portfolio-table">
+                <thead><tr><th scope="col">Тікер</th><th scope="col">Компанія</th><th scope="col">Кількість</th><th scope="col">Середня ціна купівлі</th><th scope="col">Сума вкладень</th></tr></thead>
+                <tbody data-position-rows></tbody>
+              </table>
+            </div>
+            <p class="empty-state" data-position-empty hidden>Портфель поки порожній. Поповніть деморахунок і виконайте віртуальну купівлю.</p>
+            <p class="feedback-hint">Відображаються лише кількість, середня ціна демокупівлі та вкладена сума. Актуальні ціни й нереалізований прибуток не розраховуються.</p>
+          </section>
+          <section class="profile-card">
+            <h2>Історія віртуальних операцій</h2>
+            <p class="empty-state" data-transactions-empty hidden>Операцій поки немає.</p>
+            <ul class="transaction-list" data-transactions></ul>
+          </section>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

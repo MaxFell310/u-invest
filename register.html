@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Створення акаунта U-Invest." />
+    <title>Реєстрація | U-Invest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="api-config.js" defer></script>
+    <script src="supabase-config.js" defer></script>
+    <script src="site.js" defer></script>
+    <script src="auth-pages.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html" aria-label="U-Invest, головна"><span class="brand-mark">U-Invest</span></a>
+        <div class="header-tools">
+          <section class="exchange-rates" data-exchange-rates aria-label="Готівкові курси ПриватБанку">
+            <span class="exchange-provider">ПриватБанк</span>
+            <div class="exchange-rate-row" data-rate="USD" hidden><strong>USD / UAH</strong><span>Купівля <b data-buy>—</b></span><span>Продаж <b data-sale>—</b></span></div>
+            <div class="exchange-rate-row" data-rate="EUR" hidden><strong>EUR / UAH</strong><span>Купівля <b data-buy>—</b></span><span>Продаж <b data-sale>—</b></span></div>
+            <small data-rates-status role="status" aria-live="polite">Завантаження курсів…</small>
+          </section>
+          <div class="account-menu-wrap">
+            <button class="account-menu-toggle" type="button" data-account-toggle aria-expanded="false" aria-controls="account-menu" aria-haspopup="menu" aria-label="Відкрити меню акаунта"><span aria-hidden="true">☰</span></button>
+            <div class="account-menu" id="account-menu" data-account-menu role="menu" hidden>
+              <div data-anonymous-links><a href="login.html" role="menuitem">Увійти</a><a href="register.html" role="menuitem">Зареєструватися</a><a href="index.html" role="menuitem">Головна сторінка</a></div>
+              <div data-authenticated-links hidden><a href="profile.html" role="menuitem">Мій кабінет</a><a href="profile.html#portfolio" role="menuitem">Мій портфель</a><button type="button" role="menuitem" data-site-logout>Вийти</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="section auth-section">
+      <div class="container auth-container">
+        <span class="eyebrow">Демо / Віртуальний портфель</span>
+        <h1>Створити акаунт</h1>
+        <p class="form-status" data-auth-status role="status" aria-live="polite" hidden></p>
+        <form class="feedback-form auth-form" data-auth-form data-auth-mode="register">
+          <label>Ім’я користувача<input type="text" name="username" autocomplete="name" minlength="2" maxlength="80" required /></label>
+          <label>Email<input type="email" name="email" autocomplete="email" maxlength="254" required /></label>
+          <label>Пароль<input type="password" name="password" autocomplete="new-password" minlength="8" required aria-describedby="password-hint" /></label>
+          <small id="password-hint" class="feedback-hint">Не менше 8 символів, великі й малі латинські літери та цифра.</small>
+          <label>Повторіть пароль<input type="password" name="passwordConfirmation" autocomplete="new-password" minlength="8" required /></label>
+          <button class="btn btn-primary" type="submit">Створити акаунт</button>
+        </form>
+        <p class="auth-switch">Вже маєте акаунт? <a href="login.html">Увійти</a></p>
+        <p class="demo-notice">Це навчальний симулятор. Жодних реальних платежів або купівлі акцій не відбувається.</p>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,4 +1,5 @@
 from collections.abc import Generator
+from uuid import UUID
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -21,6 +22,34 @@ def get_db(request: Request) -> Generator[Session, None, None]:
 def require_admin(
     credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
 ) -> str:
+    claims = _authenticated_claims(credentials)
+    subject = str(claims["sub"])
+    if subject.lower() not in admin_user_ids():
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="This account is not authorized to view feedback.",
+        )
+    return subject
+
+
+def require_user(
+    credentials: HTTPAuthorizationCredentials | None = Depends(bearer_scheme),
+) -> dict[str, object]:
+    claims = _authenticated_claims(credentials)
+    try:
+        UUID(str(claims["sub"]))
+    except (KeyError, ValueError) as error:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="The access token has no valid user identity.",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from error
+    return claims
+
+
+def _authenticated_claims(
+    credentials: HTTPAuthorizationCredentials | None,
+) -> dict[str, object]:
     if credentials is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -50,19 +79,14 @@ def require_admin(
     except RuntimeError as error:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-            detail="Administrator authentication is not configured.",
+            detail="Authentication is not configured.",
         ) from error
 
     subject = claims.get("sub")
-    if not isinstance(subject, str):
+    if not isinstance(subject, str) or not subject:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="The access token has no valid user identity.",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    if subject.lower() not in admin_user_ids():
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="This account is not authorized to view feedback.",
-        )
-    return subject
+    return claims

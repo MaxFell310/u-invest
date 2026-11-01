@@ -1848,3 +1848,482 @@ button {
     flex-wrap: wrap;
   }
 }
+
+[hidden] {
+  display: none !important;
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+}
+
+.exchange-rates {
+  display: grid;
+  gap: 3px;
+  width: min(330px, 30vw);
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
+.exchange-provider {
+  color: var(--accent-dark);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
+.exchange-rate-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.exchange-rate-row strong {
+  font-size: 0.7rem;
+}
+
+.exchange-rate-row b {
+  font-variant-numeric: tabular-nums;
+}
+
+.exchange-rates small {
+  color: var(--muted);
+  font-size: 0.62rem;
+}
+
+.exchange-rates small.is-stale {
+  color: #8a5700;
+}
+
+.account-menu-wrap {
+  position: relative;
+  order: 2;
+}
+
+.account-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.account-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 60;
+  width: max-content;
+  min-width: 200px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  max-height: min(70vh, 560px);
+  overflow-y: auto;
+}
+
+.account-primary-links {
+  display: none;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.account-menu [role="menuitem"] {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.account-menu [role="menuitem"]:hover,
+.account-menu [role="menuitem"]:focus-visible {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.auth-section {
+  min-height: calc(100vh - 78px);
+  padding-top: 72px;
+}
+
+.auth-container {
+  max-width: 520px;
+  padding: 34px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.auth-container h1,
+.profile-heading h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.06em;
+}
+
+.auth-container > p {
+  color: var(--muted);
+}
+
+.auth-form {
+  margin-top: 22px;
+}
+
+.auth-form input,
+.profile-card input,
+.profile-card select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+  font: inherit;
+  font-weight: 400;
+}
+
+.auth-switch a {
+  color: var(--accent-dark);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.recovery-details {
+  margin-top: 20px;
+  color: var(--accent-dark);
+}
+
+.recovery-details summary {
+  width: fit-content;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.recovery-details form {
+  margin-top: 14px;
+}
+
+.demo-notice {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--accent-dark) !important;
+  font-size: 0.85rem;
+}
+
+.form-status {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.form-status[data-kind="success"] {
+  background: #e8f5ec;
+  color: #14532d;
+}
+
+.form-status[data-kind="error"] {
+  background: #fff0ef;
+  color: #9c2c22;
+}
+
+.profile-container {
+  display: grid;
+  gap: 22px;
+}
+
+.profile-heading,
+.profile-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-heading p,
+.profile-card > p {
+  color: var(--muted);
+}
+
+.profile-card {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: 0 12px 28px rgba(17, 24, 39, 0.04);
+}
+
+.profile-card h2 {
+  margin-top: 0;
+  letter-spacing: -0.04em;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.user-card h2 {
+  margin: 0;
+}
+
+.user-card dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin: 0;
+}
+
+.user-card dl div {
+  min-width: 150px;
+}
+
+.user-card dt,
+.balance-card > span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.user-card dd {
+  margin: 4px 0 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.balance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.balance-card {
+  display: grid;
+  gap: 12px;
+}
+
+.balance-card strong {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
+}
+
+.profile-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.portfolio-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.portfolio-table th,
+.portfolio-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.portfolio-table th {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.empty-state {
+  margin: 16px 0 0;
+  padding: 14px;
+  border-radius: 12px;
+  background: #f8f9fc;
+  color: var(--muted);
+}
+
+.transaction-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.transaction-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.transaction-list small {
+  color: var(--muted);
+  text-align: right;
+}
+
+@media (max-width: 980px) {
+  .exchange-rates {
+    width: 290px;
+  }
+}
+
+@media (max-width: 760px) {
+  .nav-toggle {
+    display: none;
+  }
+
+  .header-tools {
+    gap: 7px;
+  }
+
+  .account-primary-links {
+    display: block;
+  }
+
+  .exchange-rates {
+    width: min(290px, calc(100vw - 184px));
+    padding: 6px 7px;
+    font-size: 0.62rem;
+  }
+
+  .exchange-rate-row {
+    gap: 2px;
+  }
+
+  .balance-grid,
+  .profile-actions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .user-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-inner {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 7px;
+  }
+
+  .brand-mark {
+    font-size: 1.2rem;
+  }
+
+  .header-tools {
+    display: contents;
+  }
+
+  .exchange-rates {
+    order: 3;
+    width: 100%;
+    flex-basis: 100%;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .exchange-provider {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .exchange-rates small {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    text-align: right;
+  }
+
+  .exchange-rate-row {
+    grid-column: span 2;
+    grid-template-columns: minmax(62px, 1fr) 1fr 1fr;
+  }
+
+  .exchange-rate-row strong {
+    font-size: 0.62rem;
+  }
+
+  .exchange-rates {
+    padding: 5px 8px;
+    font-size: 0.55rem;
+  }
+
+  .account-menu-wrap {
+    margin-left: auto;
+  }
+
+  .exchange-provider {
+    font-size: 0.58rem;
+  }
+
+  .exchange-rates small {
+    font-size: 0.53rem;
+  }
+
+  .account-menu-toggle {
+    width: 40px;
+    height: 40px;
+  }
+
+  .auth-container,
+  .profile-card {
+    padding: 20px 16px;
+  }
+
+  .user-card dl {
+    display: grid;
+    gap: 12px;
+  }
+
+  .profile-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .transaction-list li {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .transaction-list small {
+    text-align: left;
+  }
+}

@@ -25,7 +25,9 @@
 
         <button
           class="nav-toggle"
+          type="button"
           aria-expanded="false"
+          aria-controls="main-nav"
           aria-label="Відкрити меню"
         >
           <span></span>
@@ -33,7 +35,7 @@
           <span></span>
         </button>
 
-        <nav class="main-nav" aria-label="Головне меню">
+        <nav class="main-nav" id="main-nav" aria-label="Головне меню">
           <a href="#about">Про проект</a>
           <a href="#how">Як це працює</a>
           <a href="#features">Можливості</a>
@@ -51,6 +53,56 @@
             Почати
           </button>
         </nav>
+        <div class="header-tools">
+          <section class="exchange-rates" data-exchange-rates aria-label="Готівкові курси ПриватБанку">
+            <span class="exchange-provider">ПриватБанк</span>
+            <div class="exchange-rate-row" data-rate="USD" hidden>
+              <strong>USD / UAH</strong>
+              <span>Купівля <b data-buy>—</b></span>
+              <span>Продаж <b data-sale>—</b></span>
+            </div>
+            <div class="exchange-rate-row" data-rate="EUR" hidden>
+              <strong>EUR / UAH</strong>
+              <span>Купівля <b data-buy>—</b></span>
+              <span>Продаж <b data-sale>—</b></span>
+            </div>
+            <small data-rates-status role="status" aria-live="polite">Завантаження курсів…</small>
+          </section>
+          <div class="account-menu-wrap">
+            <button
+              class="account-menu-toggle"
+              type="button"
+              data-account-toggle
+              aria-expanded="false"
+              aria-controls="account-menu"
+              aria-haspopup="menu"
+              aria-label="Відкрити меню акаунта"
+            >
+              <span aria-hidden="true">☰</span>
+            </button>
+            <div class="account-menu" id="account-menu" data-account-menu role="menu" hidden>
+              <div class="account-primary-links">
+                <a href="#about" role="menuitem">Про проєкт</a>
+                <a href="#how" role="menuitem">Як це працює</a>
+                <a href="#features" role="menuitem">Можливості</a>
+                <a href="#responsible" role="menuitem">Відповідальність</a>
+                <a href="#feedback" role="menuitem">Відгуки</a>
+                <a href="#faq" role="menuitem">FAQ</a>
+                <button type="button" role="menuitem" data-account-cta>Почати</button>
+              </div>
+              <div data-anonymous-links>
+                <a href="login.html" role="menuitem">Увійти</a>
+                <a href="register.html" role="menuitem">Зареєструватися</a>
+                <a href="index.html" role="menuitem">Головна сторінка</a>
+              </div>
+              <div data-authenticated-links hidden>
+                <a href="profile.html" role="menuitem">Мій кабінет</a>
+                <a href="profile.html#portfolio" role="menuitem">Мій портфель</a>
+                <button type="button" role="menuitem" data-site-logout>Вийти</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -1131,7 +1183,10 @@
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="api-config.js"></script>
+    <script src="supabase-config.js"></script>
+    <script src="site.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

@@ -3,11 +3,6 @@ const loginPanel = document.querySelector("[data-admin-login]");
 const dashboard = document.querySelector("[data-admin-dashboard]");
 const loginForm = document.querySelector("[data-admin-login-form]");
 const apiBaseUrl = (window.U_INVEST_API_BASE_URL || "").replace(/\/+$/, "");
-const supabaseUrl =
-  document.querySelector('meta[name="u-invest-supabase-url"]')?.content || "";
-const supabaseAnonKey =
-  document.querySelector('meta[name="u-invest-supabase-anon-key"]')?.content ||
-  "";
 const pageSize = 25;
 let supabaseClient;
 let accessToken;
@@ -158,24 +153,16 @@ async function setSession(session) {
 }
 
 function configureAuth() {
-  if (!apiBaseUrl || !supabaseUrl || !supabaseAnonKey) {
-    showStatus(
-      "Панель ще не налаштована. Додайте API URL, Supabase URL і публічний anon key до meta-тегів цієї сторінки.",
-      true,
-    );
+  if (!apiBaseUrl) {
+    showStatus("Панель не має налаштованого API URL.", true);
     return;
   }
-  if (!window.supabase?.createClient) {
-    showStatus("Не вдалося завантажити бібліотеку входу.", true);
+  try {
+    supabaseClient = window.UInvestSupabase.getClient();
+  } catch (error) {
+    showStatus(error.message || "Не вдалося налаштувати Supabase Auth.", true);
     return;
   }
-  supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      persistSession: true,
-    },
-  });
   supabaseClient.auth.onAuthStateChange((_event, session) => {
     window.setTimeout(() => void setSession(session), 0);
   });
