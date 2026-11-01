@@ -8,6 +8,7 @@
       name="description"
       content="Захищена панель керування відповідями U-Invest."
     />
+    <meta name="u-invest-site-root" content="../../" />
 
     <meta
       name="u-invest-api-base-url"
@@ -15,23 +16,18 @@
     />
 
     <title>Панель команди | U-Invest</title>
+    <link rel="icon" type="image/jpeg" href="../../logo/logo.jpg" />
 
-    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="../../assets/css/style.css" />
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="api-config.js" defer></script>
-    <script src="supabase-config.js" defer></script>
-    <script src="admin.js" defer></script>
+    <script src="../../assets/js/shared/api-config.js" defer></script>
+    <script src="../../assets/js/shared/supabase-config.js" defer></script>
+    <script src="../../assets/js/shared/site.js" defer></script>
+    <script src="../../assets/js/pages/admin.js" defer></script>
   </head>
   <body class="admin-page">
-    <header class="site-header">
-      <div class="container header-inner">
-        <a class="brand" href="index.html" aria-label="U-Invest">
-          <span class="brand-mark">U-Invest</span>
-        </a>
-        <a class="btn btn-secondary" href="index.html">На сайт</a>
-      </div>
-    </header>
+    <div data-site-header aria-busy="true"></div>
 
     <main class="section">
       <div class="container admin-container">

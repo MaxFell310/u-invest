@@ -45,7 +45,7 @@
     const body = await response.json().catch(() => ({}));
     if (response.status === 401) {
       await client.auth.signOut();
-      window.location.replace("login.html");
+      window.UInvestPaths.redirect("pages/auth/login.html");
       throw new Error("Сесію завершено. Увійдіть знову.");
     }
     if (!response.ok) {
@@ -167,11 +167,11 @@
       showStatus("Не вдалося вийти. Спробуйте ще раз.", "error");
       return;
     }
-    window.location.replace("index.html");
+    window.UInvestPaths.navigate("index.html");
   });
 
   client.auth.onAuthStateChange((_event, session) => {
-    if (!session) window.location.replace("login.html");
+    if (!session) window.UInvestPaths.redirect("pages/auth/login.html");
     if (session) accessToken = session.access_token;
   });
 
@@ -179,13 +179,13 @@
     try {
       const { data, error } = await client.auth.getSession();
       if (error || !data.session) {
-        window.location.replace("login.html");
+        window.UInvestPaths.redirect("pages/auth/login.html");
         return;
       }
       const { data: userData, error: userError } = await client.auth.getUser();
       if (userError || !userData.user) {
         await client.auth.signOut();
-        window.location.replace("login.html");
+        window.UInvestPaths.redirect("pages/auth/login.html");
         return;
       }
       accessToken = data.session.access_token;

@@ -1,0 +1,81 @@
+<header class="site-header" data-shared-header hidden>
+  <div class="header-inner">
+    <a class="brand" data-site-link="home" aria-label="Головна сторінка U-Invest">
+      <img class="brand-icon" data-brand-icon alt="" />
+      <span class="brand-mark">U-Invest</span>
+    </a>
+    <nav class="main-nav" aria-label="Основна навігація">
+      <a data-site-link="about">Про проєкт</a>
+      <a data-site-link="how">Як це працює</a>
+      <a data-site-link="features">Можливості</a>
+      <a data-site-link="responsible">Відповідальність</a>
+      <a data-site-link="feedback">Відгуки</a>
+      <a data-site-link="faq">FAQ</a>
+    </nav>
+    <div class="header-tools">
+      <a class="btn btn-primary header-cta" data-site-link="start">Почати</a>
+      <section
+        class="exchange-rates"
+        data-exchange-rates
+        aria-label="Готівкові курси ПриватБанку"
+      >
+        <span class="exchange-provider">ПриватБанк</span>
+        <div class="exchange-rate-row" data-rate="USD" hidden>
+          <strong>USD / UAH</strong>
+          <span>Купівля <b data-buy></b></span>
+          <span>Продаж <b data-sale></b></span>
+        </div>
+        <div class="exchange-rate-row" data-rate="EUR" hidden>
+          <strong>EUR / UAH</strong>
+          <span>Купівля <b data-buy></b></span>
+          <span>Продаж <b data-sale></b></span>
+        </div>
+        <small data-rates-status role="status" aria-live="polite">
+          Завантаження курсів…
+        </small>
+      </section>
+      <div class="account-menu-wrap">
+        <button
+          class="account-menu-toggle"
+          type="button"
+          data-account-toggle
+          aria-expanded="false"
+          aria-controls="account-menu"
+          aria-haspopup="menu"
+          aria-label="Відкрити меню користувача"
+        >
+          <span aria-hidden="true">☰</span>
+        </button>
+        <div
+          class="account-menu"
+          id="account-menu"
+          data-account-menu
+          role="menu"
+          hidden
+        >
+          <nav class="account-primary-links" aria-label="Навігація сайтом">
+            <a data-site-link="about" role="menuitem">Про проєкт</a>
+            <a data-site-link="how" role="menuitem">Як це працює</a>
+            <a data-site-link="features" role="menuitem">Можливості</a>
+            <a data-site-link="responsible" role="menuitem">
+              Відповідальність
+            </a>
+            <a data-site-link="feedback" role="menuitem">Відгуки</a>
+            <a data-site-link="faq" role="menuitem">FAQ</a>
+            <a data-site-link="start" role="menuitem">Почати</a>
+          </nav>
+          <div data-anonymous-links>
+            <a data-site-link="login" role="menuitem">Увійти</a>
+            <a data-site-link="register" role="menuitem">Зареєструватися</a>
+            <a data-site-link="home" role="menuitem">Головна сторінка</a>
+          </div>
+          <div data-authenticated-links hidden>
+            <a data-site-link="profile" role="menuitem">Мій кабінет</a>
+            <a data-site-link="portfolio" role="menuitem">Мій портфель</a>
+            <button type="button" role="menuitem" data-site-logout>Вийти</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

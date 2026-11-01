@@ -8,10 +8,13 @@ provide investment recommendations.
 
 ## Architecture
 
-- `index.html`, `styles/style.css`, and `script.js` preserve the public static
-  website. `login.html`, `register.html`, `reset-password.html`, and
-  `profile.html` provide the Supabase Auth and virtual portfolio flows.
-  `admin.html` and `admin.js` provide the separate protected team dashboard.
+- `index.html` remains at the repository root for GitHub Pages. Public/auth
+  pages live in `pages/`, styles and the shared Header component live in
+  `assets/css/` and `assets/components/`, and JavaScript is divided between
+  `assets/js/shared/` and `assets/js/pages/`.
+- `pages/auth/` contains login, registration, and password recovery;
+  `pages/profile/` contains the user dashboard; and `pages/admin/` contains
+  the private team dashboard.
 - The existing `uv` project at the repository root builds the
   `src/u_invest` package; there is no second Python project.
 - `src/u_invest/main.py` configures FastAPI and registers the `/api` routers.
@@ -29,6 +32,46 @@ provide investment recommendations.
 - Public survey submissions do not request names, email, IP addresses, or
   browser fingerprints. Supabase Auth serves both public user accounts and
   team accounts, with backend authorization kept separate.
+
+### Frontend layout
+
+```text
+index.html
+pages/
+  auth/
+    login.html
+    register.html
+    reset-password.html
+  profile/
+    profile.html
+  admin/
+    admin.html
+assets/
+  components/
+    header.html
+  css/
+    style.css
+  js/
+    shared/
+      api-config.js
+      site.js
+      supabase-config.js
+    pages/
+      admin.js
+      auth.js
+      home.js
+      profile.js
+logo/
+  logo.jpg
+```
+
+`index.html` stays at the repository root. Nested pages declare their relative
+site root in a meta tag; shared navigation, CSS, JS, images, and authentication
+redirects resolve from that root, preserving both GitHub Pages' `/u-invest/`
+prefix and local HTTP Server/Live Server URLs. The common Header is loaded
+from the static HTML fragment at `assets/components/header.html`; no Node.js
+server or client-side router is required.
+All pages use the existing `logo/logo.jpg` as their favicon and header mark.
 
 Technologies: Python 3.14+, FastAPI, Pydantic, SQLAlchemy 2.0, Alembic,
 PostgreSQL/psycopg, optional SQLite, Supabase Auth, vanilla HTML/CSS/JavaScript,
@@ -229,7 +272,8 @@ aggregated counts, and a CSV export.
    users. Keep email confirmation enabled; do not disable Supabase confirmation
    to simplify testing.
 2. Keep the existing team workflow: in **Supabase → Authentication → Users**,
-   invite each collaborator to their own address. They sign in to `admin.html`
+   invite each collaborator to their own address. They sign in to
+   `pages/admin/admin.html`
    using the existing emailed Magic Link.
 3. Copy each invited user's Auth UUID. Set backend environment variable
    `U_INVEST_ADMIN_USER_IDS` to the comma-separated UUIDs authorized to read
@@ -240,12 +284,16 @@ aggregated counts, and a CSV export.
    settings, not secrets. Never put the database password, service-role key,
    JWT signing secret, or other administrative secret in frontend code.
 5. In **Supabase → Authentication → URL Configuration → Redirect URLs**, add:
-   - `https://maxfell310.github.io/u-invest/login.html`
-   - `https://maxfell310.github.io/u-invest/reset-password.html`
-   - `https://maxfell310.github.io/u-invest/admin.html`
-   - `http://127.0.0.1:5500/login.html`
-   - `http://127.0.0.1:5500/reset-password.html`
-   - `http://127.0.0.1:5500/admin.html`
+   - `https://maxfell310.github.io/u-invest/pages/auth/login.html`
+   - `https://maxfell310.github.io/u-invest/pages/auth/reset-password.html`
+   - `https://maxfell310.github.io/u-invest/pages/admin/admin.html`
+   - `http://127.0.0.1:5500/pages/auth/login.html`
+   - `http://127.0.0.1:5500/pages/auth/reset-password.html`
+   - `http://127.0.0.1:5500/pages/admin/admin.html`
+
+Registration and password-recovery links are generated from the centralized
+site-root setting in `assets/js/shared/api-config.js`, so they include the
+GitHub Pages `/u-invest/` project path and the relocated `pages/auth/` paths.
 
 The API verifies the token's signature against Supabase's published JWKS and
 checks issuer, audience, and the JWT `sub` UUID. Configure Supabase Auth to
@@ -300,7 +348,7 @@ do not fabricate participants, findings, or conclusions.
 ## Frontend configuration and CORS
 
 Frontend pages load the shared `api-config.js` and singleton
-`supabase-config.js`. `api-config.js` selects the local API
+`supabase-config.js` from `assets/js/shared/`. It selects the local API
 (`http://127.0.0.1:8000`) only when served from `localhost`, `127.0.0.1`, or
 `[::1]`; all other hosts use `https://u-invest-fastapi.onrender.com`. No API
 URL is duplicated in the HTML pages. The Supabase publishable key is public
@@ -340,8 +388,8 @@ settings, apply `uv run alembic upgrade head` as a release step, and run
 `uv run u-invest` (or the host's equivalent start command). Ensure the host
 routes HTTPS to FastAPI.
 
-The API base requires no per-deployment edit: `api-config.js` selects Render
-for GitHub Pages and localhost for local development. Verify the centralized
+The API base requires no per-deployment edit: `assets/js/shared/api-config.js`
+selects Render for GitHub Pages and localhost for local development. Verify the centralized
 public Supabase URL and publishable key in `api-config.js` match the intended
 project, configure the redirect URLs, and invite the authorized collaborators
 as described above. No production Auth setting or database migration was

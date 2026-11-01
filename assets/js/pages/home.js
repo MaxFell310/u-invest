@@ -1,6 +1,3 @@
-const body = document.body;
-const menuToggle = document.querySelector(".nav-toggle");
-const navLinks = document.querySelectorAll(".main-nav a");
 const faqItems = document.querySelectorAll(".faq-item");
 const revealItems = document.querySelectorAll(".reveal");
 const modal = document.getElementById("demo-modal");
@@ -183,21 +180,6 @@ esgBadges.forEach(badge => {
     });
     badge.setAttribute("aria-expanded", String(!isExpanded));
     badge.classList.toggle("is-tooltip-open", !isExpanded);
-  });
-});
-
-if (menuToggle) {
-  menuToggle.addEventListener("click", () => {
-    const expanded = menuToggle.getAttribute("aria-expanded") === "true";
-    menuToggle.setAttribute("aria-expanded", String(!expanded));
-    body.classList.toggle("menu-open");
-  });
-}
-
-navLinks.forEach(link => {
-  link.addEventListener("click", () => {
-    body.classList.remove("menu-open");
-    menuToggle?.setAttribute("aria-expanded", "false");
   });
 });
 

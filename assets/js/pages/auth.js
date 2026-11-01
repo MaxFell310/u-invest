@@ -35,7 +35,7 @@
 
   if (form?.dataset.authMode === "register" || form?.dataset.authMode === "login") {
     void isValidSession().then(valid => {
-      if (valid) window.location.replace("profile.html");
+      if (valid) window.UInvestPaths.redirect("pages/profile/profile.html");
     });
   }
 
@@ -72,12 +72,12 @@
           password,
           options: {
             data: { username: String(values.username).trim() },
-            emailRedirectTo: new URL("login.html", window.location.href).href,
+            emailRedirectTo: window.UInvestPaths.href("pages/auth/login.html"),
           },
         });
         if (error) throw error;
         if (data.session && await isValidSession()) {
-          window.location.replace("profile.html");
+          window.UInvestPaths.redirect("pages/profile/profile.html");
           return;
         }
         form.hidden = true;
@@ -93,7 +93,7 @@
       if (!await isValidSession()) {
         throw new Error("Не вдалося підтвердити сесію. Спробуйте увійти ще раз.");
       }
-      window.location.replace("profile.html");
+      window.UInvestPaths.redirect("pages/profile/profile.html");
     } catch (error) {
       showStatus(friendlyAuthError(error), "error");
     } finally {
@@ -108,7 +108,9 @@
     try {
       const email = String(new FormData(recoveryForm).get("email")).trim();
       const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
-        redirectTo: new URL("reset-password.html", window.location.href).href,
+        redirectTo: window.UInvestPaths.href(
+          "pages/auth/reset-password.html",
+        ),
       });
       if (error) throw error;
       showStatus("Якщо для цієї адреси є акаунт, надіслано інструкцію для відновлення пароля.", "success");
